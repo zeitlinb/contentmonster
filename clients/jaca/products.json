@@ -1,0 +1,35 @@
+{
+  "products": [
+    {
+      "id": "jaca-pouch",
+      "name": "Jaca Rare Sugar Pouch",
+      "variants": ["16oz", "24oz"],
+      "description": "Pure allulose rare sugar",
+      "productUrl": "jacasugar.com/products/jaca-rare-sugar",
+      "aiRules": {
+        "canFeedToAI": false,
+        "reason": "Garbles packaging text — generate scene ONLY, composite real product photo on top",
+        "compositeMethod": "background-removal + drop-shadow + color-matching via Sharp, then position via Remotion"
+      },
+      "bestProductPhoto": "1-PSWALrjxRxnRegMugCGjjSAkMjCwcxM.jpg",
+      "attributes": {
+        "rational": ["0 Net Carbs", "90% Fewer Calories", "Non-GMO", "Diabetic & Keto Friendly", "Clean Ingredients"],
+        "emotional": ["Sugar Without the Guilt", "Clean Sweetness You Can Trust", "Sweetness You Deserve"]
+      }
+    },
+    {
+      "id": "jaca-jolt",
+      "name": "Jaca Jolt",
+      "description": "Energy shot — caffeine & vitamins, sweetened with Jaca allulose",
+      "productUrl": "jacasugar.com/products/jaca-jolt",
+      "aiRules": {
+        "canFeedToAI": true,
+        "reason": "Simple bold graphics render correctly in AI generation"
+      },
+      "attributes": {
+        "rational": ["Zero Net Carbs", "Clean Energy", "Caffeine & Vitamins"],
+        "emotional": ["Energy Without The Garbage"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "negativeConstraints": {
+    "base": "No text overlays, no typography, no logos, no watermarks, no distorted text on packaging, no extra fingers, no deformed objects, no over-smoothed textures, no heavy HDR glow, no cartoon elements",
+    "food": "No unrealistic food colors, no floating objects, no impossible reflections, no duplicate items, no melted/distorted packaging"
+  },
+  "scenes": [
+    {
+      "id": "kitchen-counter",
+      "name": "Kitchen Counter",
+      "product": "jaca-pouch",
+      "layoutType": "B",
+      "prompt": {
+        "subject": "Modern farmhouse kitchen, honed white marble countertop with gray veining throughout entire surface, a woman's hand reaching for a fresh golden cookie from a brass cooling rack in the upper-left area, half-drunk ceramic coffee mug, open recipe notebook, scattered allulose granules bridging from scene elements toward the product placement zone, fresh berries for color contrast, copper pendant lights in warm bokeh, white subway tile backsplash visible across the full width",
+        "composition": "Vertical 4:5 portrait orientation, 1080 wide by 1350 tall, slightly elevated angle, product placement zone in lower-right third occupying 30-35% of frame, clean marble with continued backsplash/environment behind it — NOT just empty marble texture. The scene must feel like ONE continuous environment, not a scene stitched to a marble swatch",
+        "action": "A woman's hand reaching for a fresh golden cookie from a brass cooling rack, scattered allulose granules catching light",
+        "location": "Sun-drenched California kitchen, golden hour through sheer linen curtains",
+        "style": "Editorial food photography, Canon EOS R5 85mm f/1.4, shallow DOF, warm golden hour color grading"
+      },
+      "addFoodNegatives": true
+    },
+    {
+      "id": "coffee-bar",
+      "name": "Coffee Bar",
+      "product": "jaca-pouch",
+      "layoutType": "A",
+      "prompt": {
+        "subject": "Steaming ceramic coffee mug on dark walnut counter, empty space beside mug for product, blurred kitchen shelves with mason jars and plants",
+        "composition": "Vertical 4:5 portrait orientation, 1080 wide by 1350 tall, product space beside mug",
+        "action": "Steam rising from coffee mug, soft morning ambiance",
+        "location": "Cozy coffee bar, soft morning window light from left",
+        "style": "Lifestyle photography, Sony A7IV 35mm f/1.8, shallow DOF f/2.0, warm amber grading"
+      },
+      "addFoodNegatives": true
+    },
+    {
+      "id": "gym-energy",
+      "name": "Gym/Energy",
+      "product": "jaca-jolt",
+      "layoutType": "G",
+      "prompt": {
+        "subject": "Jolt bottle on flat bench surface, blurred athletic equipment in background",
+        "composition": "Vertical 4:5 portrait orientation, 1080 wide by 1350 tall, product centered on bench",
+        "action": "Early morning gym session, strong rim light from behind",
+        "location": "Industrial gym, early morning light cutting through high warehouse windows",
+        "style": "High contrast photography, Canon EOS R5 24-70mm f/2.8, desaturated teal shadows with warm highlights"
+      },
+      "addFoodNegatives": false
+    },
+    {
+      "id": "baking-scene",
+      "name": "Baking Scene",
+      "product": "jaca-pouch",
+      "layoutType": "F",
+      "prompt": {
+        "subject": "Flour-dusted cutting board, rolling pin, cookie cutters, mixing bowl with batter, rustic farmhouse table with wood grain",
+        "composition": "Vertical 4:5 portrait orientation, 1080 wide by 1350 tall, overhead flat lay, empty space center-left for product composite",
+        "action": "Baking in progress, flour dust in air, cookie cutters scattered",
+        "location": "Farmhouse kitchen table, soft diffused overhead light",
+        "style": "Shot on iPhone 15 Pro, warm filter, casual authentic UGC feel"
+      },
+      "addFoodNegatives": true
+    }
+  ]
+}

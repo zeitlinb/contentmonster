@@ -1,0 +1,81 @@
+{
+  "name": "Meta",
+  "platforms": ["facebook", "instagram"],
+  "formats": {
+    "feed_vertical": {
+      "width": 1080,
+      "height": 1350,
+      "ratio": "4:5",
+      "use": "Instagram/Facebook feed — best performing format"
+    },
+    "feed_square": {
+      "width": 1080,
+      "height": 1080,
+      "ratio": "1:1",
+      "use": "Universal fallback, all platforms"
+    },
+    "stories_reels": {
+      "width": 1080,
+      "height": 1920,
+      "ratio": "9:16",
+      "use": "Stories, Reels, TikTok"
+    }
+  },
+  "uploadResolution": {
+    "minWidth": 1440,
+    "note": "Meta compression is aggressive — upload at 1440px minimum width for square to survive compression"
+  },
+  "fileFormats": {
+    "photoHeavy": "jpg",
+    "graphicHeavy": "png"
+  },
+  "maxFileSizeMB": 5,
+  "safeZones": {
+    "stories_reels_9_16": {
+      "topPx": 250,
+      "topPercent": 14,
+      "bottomPx": 340,
+      "bottomPercent": 20,
+      "safeArea": { "width": 1080, "height": 1610, "position": "centered" }
+    },
+    "reels_tight_9_16": {
+      "topPercent": 14,
+      "bottomPercent": 35,
+      "sidesPercent": 6
+    },
+    "feed_4_5": {
+      "topPx": 180,
+      "bottomPx": 180,
+      "allEdgesMinPx": 100
+    },
+    "feed_1_1": {
+      "topPx": 180,
+      "bottomPx": 180,
+      "allEdgesMinPx": 100
+    }
+  },
+  "videoSpecs": {
+    "format": "mp4",
+    "codec": "H.264",
+    "maxLengthSeconds": { "feed": 30, "stories": 15 },
+    "designForMute": true,
+    "mutedViewPercent": 83,
+    "captionsRequired": true
+  },
+  "bestPractices": {
+    "headlineMaxChars": 27,
+    "primaryTextHookChars": 125,
+    "headlineVariants": "3-5 for Advantage+ rotation",
+    "textCoverageMaxPercent": 20,
+    "attributePills": "2-3 visible on image, mix rational + emotional",
+    "noTextOverFaces": true,
+    "sizeVariantRule": "1:1 must be REPOSITIONED layout, not a crop of 4:5"
+  },
+  "captionStyle": {
+    "font": "bold sans-serif (Arial Black, Montserrat Bold, or similar)",
+    "color": "white with black outline/stroke",
+    "position": "lower third",
+    "maxWordsPerLine": 5,
+    "syncToSpeech": true
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "specChecklist": {
+    "dimensionsFormat": [
+      "Output dimensions match target (1080x1350 for 4:5, 1080x1080 for 1:1, 1080x1920 for 9:16)?",
+      "File format correct (PNG for graphics, JPG for photos)?",
+      "File size under 5MB?"
+    ],
+    "logo": [
+      "Logo on transparent background? (Black box/colored rectangle = FAIL)",
+      "Logo at least 2x expected size? Readable at mobile?",
+      "Logo placement varies (not always same corner)?"
+    ],
+    "textPlacement": [
+      "ALL text at least 100px from every edge (top, bottom, left, right)?",
+      "ALL pill boxes at least 100px from every edge?",
+      "CTA bar is the ONLY element allowed at very bottom edge?",
+      "ZERO text over any person's face or head?",
+      "In split-frame layouts: all text stays on its side?"
+    ],
+    "product": [
+      "Product FULLY visible — not cut off at any edge?",
+      "Product shows REAL packaging text? (AI gibberish = FAIL)",
+      "Product placed naturally — not on white card or floating rectangle?"
+    ],
+    "background": [
+      "Background is LIGHT or VIBRANT? (Dark navy/charcoal/black/dark gray = FAIL)"
+    ],
+    "spacing": [
+      "Elements spread across frame? (Everything crammed in one quarter = FAIL)",
+      "Dead space under 30%?",
+      "Text coverage under 20% of image area?"
+    ],
+    "typography": [
+      "At least 2 different font sizes?",
+      "Headline stroked/outlined for contrast?",
+      "At least 2 different font colors?",
+      "Pill boxes FULLY contain text with generous padding on all sides?"
+    ],
+    "attributes": [
+      "2-3 visible attributes on the ad?",
+      "At least 1 attribute is EMOTIONAL (not just data)?",
+      "No REDUNDANT claims (same claim in headline AND pills = FAIL)?"
+    ],
+    "sizeVariants": [
+      "1:1 version has REPOSITIONED elements (not just cropped 4:5)?",
+      "Product fully visible in BOTH 4:5 and 1:1?",
+      "All elements within safe zones in both versions?"
+    ],
+    "sceneQuality": [
+      "Photorealism — looks like a real photograph?",
+      "Lighting direction consistent throughout?",
+      "Depth of field looks like real camera bokeh?",
+      "No AI artifacts (extra objects, melted details, impossible physics)?",
+      "Marble/surface veining continues throughout (no flat/synthetic zones)?",
+      "Environmental continuity in product placement zone (backsplash continues)?",
+      "Color temperature consistent across full frame?",
+      "Scale consistency (all objects proportional)?",
+      "Edge quality (no haloing, fringing)?"
+    ],
+    "compositeQuality": [
+      "Background removal clean? No white fringing or halos?",
+      "Product color temperature matches scene?",
+      "Contact shadow present, directionally correct?",
+      "Product scale correct relative to scene objects?",
+      "Product zone is 30-35% of frame (not 40%+ dead marble)?"
+    ]
+  },
+  "creativeRubric": {
+    "dimensions": [
+      { "name": "Product Integration", "description": "Does the product look naturally placed? (1=pasted on, 10=looks like a real photograph)" },
+      { "name": "Text Variation", "description": "Is the text treatment unique vs other work? (1=identical, 10=fresh and distinctive)" },
+      { "name": "Reference Fidelity", "description": "Does layout borrow from proven ad patterns? (1=invented from nothing, 10=clearly adapted)" },
+      { "name": "Attribute Visibility", "description": "Are product attributes visible ON the image? (1=nowhere, 10=prominent and readable)" },
+      { "name": "Contrast/Readability", "description": "Can ALL text be read instantly at mobile size? (1=invisible, 10=perfect contrast)" },
+      { "name": "Dead Space", "description": "Is composition full and intentional? (1=40%+ wasted, 10=every area serves purpose)" },
+      { "name": "CTA Clarity", "description": "Is there a clear, compelling call to action? (1=missing, 10=strong and visible)" },
+      { "name": "Scroll-Stop Power", "description": "Would this make someone stop scrolling? (1=generic, 10=genuinely eye-catching)" }
+    ],
+    "thresholds": {
+      "pass": 7.0,
+      "redo": 5.0,
+      "scrap": 5.0,
+      "minSingleDimension": 6,
+      "maxRedosPerStep": 3
+    },
+    "calibrationNote": "Score HONESTLY. An 8 means 'I would run this ad with my own money.'"
+  }
+}

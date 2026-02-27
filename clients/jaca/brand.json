@@ -1,0 +1,50 @@
+{
+  "name": "Jaca Sugar",
+  "website": "jacasugar.com",
+  "fonts": {
+    "headline": { "family": "Roboto Slab", "weight": 700, "style": "Bold" },
+    "body": { "family": "Roboto Slab", "weight": 300, "style": "Light" }
+  },
+  "colors": {
+    "primary": [
+      { "name": "Jaca Green", "hex": "#CCDB2A", "role": "Primary — lime/yellow-green" },
+      { "name": "Leaf Green", "hex": "#95C93D", "role": "Primary — natural green" }
+    ],
+    "accent": [
+      { "name": "Teal", "hex": "#00AF9A", "role": "Accent" },
+      { "name": "Purple", "hex": "#3F2B56", "role": "Accent — deep purple" },
+      { "name": "Red", "hex": "#FF4438", "role": "Accent — vibrant red" }
+    ],
+    "text": { "name": "Black", "hex": "#000000" }
+  },
+  "logo": {
+    "wordmark": "JACA",
+    "tagline": "100% Allulose Rare Sugar",
+    "colorVariants": ["green", "purple", "red", "white"],
+    "rules": {
+      "background": "transparent-only",
+      "minScale": 2.0,
+      "note": "Current files have BLACK backgrounds — need transparent extraction before use",
+      "placementVaries": true
+    }
+  },
+  "backgroundRule": {
+    "allowed": ["light", "vibrant"],
+    "banned": ["dark navy", "charcoal", "black", "dark gray"],
+    "description": "NO dark backgrounds. Ever. Light or vibrant only."
+  },
+  "language": {
+    "bannedTerms": [
+      { "term": "real sugar", "replacement": "traditional sugar", "reason": "Jaca IS real sugar" },
+      { "term": "the real thing", "context": "about other sugars", "reason": "Jaca is the real thing" }
+    ],
+    "approvedAlternatives": ["traditional sugar", "conventional sugar", "the sugar we grew up with", "old school sugar"],
+    "approvedCopy": ["Cooks, bakes, and tastes like traditional sugar"]
+  },
+  "driveAssets": {
+    "brandLogos": "1LIxX8h8c3nJl_buB4owF1rIxJMDZXSGA",
+    "productPhotos": "1y3aT6KObReEtqAzDx0ppPvtSVoiByYol",
+    "ugc": "1W-8iOu8hfSBWtKLkaUb0_omhcEATsvfz",
+    "adCreativeLibrary": "1ZMAitCdv9Ce_P7YShOC1UTy2s68LRLLw"
+  }
+}

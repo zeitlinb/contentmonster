@@ -1,0 +1,53 @@
+{
+  "layouts": [
+    {
+      "type": "A",
+      "name": "Product Hero",
+      "description": "Product dominates 60%+ of frame. Text overlay minimal.",
+      "productPercent": "60%+",
+      "textPercent": "minimal"
+    },
+    {
+      "type": "B",
+      "name": "Lifestyle Scene",
+      "description": "Product in context. Text as caption bar, not overlaid on scene.",
+      "productPercent": "25-35%",
+      "textPercent": "caption bar"
+    },
+    {
+      "type": "C",
+      "name": "Text-Wall / Testimonial",
+      "description": "Bold text dominates. Small product in corner.",
+      "productPercent": "15-20%",
+      "textPercent": "60%+"
+    },
+    {
+      "type": "D",
+      "name": "Split-Frame",
+      "description": "Image on one half, text/claims on the other. Nothing crosses the dividing line.",
+      "productPercent": "50%",
+      "textPercent": "50%"
+    },
+    {
+      "type": "E",
+      "name": "Infographic / Education",
+      "description": "Data-forward. Comparisons, ingredient callouts.",
+      "productPercent": "20-30%",
+      "textPercent": "50%+"
+    },
+    {
+      "type": "F",
+      "name": "UGC-Style",
+      "description": "Filmed feel. Casual. Person's hands using product.",
+      "productPercent": "25-35%",
+      "textPercent": "captions"
+    },
+    {
+      "type": "G",
+      "name": "Bold Graphic",
+      "description": "Solid color background. Product floating. Big typography.",
+      "productPercent": "40%+",
+      "textPercent": "40%+"
+    }
+  ]
+}
