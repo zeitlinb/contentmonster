@@ -43,4 +43,5 @@
 - ✅ Project memory at `~/.claude/projects/-Users-zeitlinb-Projects-contentmonster/memory/`.
 
 ## Deploy
-- 🅿️ Vercel link + deploy runbook — deferred until there's an app worth deploying (web is a placeholder).
+- ✅ Vercel wired — project `contentmonster` (team `brad-zeitlins-projects`), GitHub-integration auto-deploys; **Root Directory = `apps/web`** (Turborepo auto-detected, pnpm install at workspace root). PR previews build green.
+- ⏳ Deploy runbook + production promotion posture — write when there's a real app to ship (web is a placeholder).
