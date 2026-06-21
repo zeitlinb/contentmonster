@@ -1,3 +1,15 @@
+---
+status: superseded
+era: pre-monorepo (single Next.js app, npm)
+timestamp: 2026-02-27
+superseded_by: docs/state/20260621-112135-monorepo-migration.md
+note: >
+  Preserved VERBATIM from the pre-monorepo era. The Windows source paths and the
+  "different machine" warning below are historical — this repo now lives on macOS
+  at /Users/zeitlinb/Projects/contentmonster. The Google Drive setup has been
+  promoted to a runbook at docs/runbooks/google-drive-setup.md. Do not edit the body.
+---
+
 # Session State — Last Updated 2026-02-27
 
 ## What's Done

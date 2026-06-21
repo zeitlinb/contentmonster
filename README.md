@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ContentMonster
 
-## Getting Started
+AI-native **content engine** — one house running multiple content pipelines that
+share a common core (AI generation, media ops, QA, multi-tenant config).
 
-First, run the development server:
+- **Ad-creative pipeline** — Meta (Instagram/Facebook) ad creative, static + video, from a brand brief.
+- **Book-publishing pipeline** — books for Amazon (KDP). _(newest realm; design in progress)_
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Layout (Turborepo + pnpm)
+
+```
+apps/web        Next.js dashboard
+apps/cli        commander CLI (pipeline commands, run via tsx)
+packages/core   @contentmonster/core — shared engine: ai · media · config · platform · qa · types
+clients/<id>    per-tenant config (Jaca Sugar is the test client)
+platform/       universal Meta/platform specs
+docs/           charter, engineering standards, references, runbooks, state
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Commands
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install           # install the workspace
+pnpm dev               # run the web app (next dev)
+pnpm build             # turbo build
+pnpm check-types       # tsc --noEmit across workspaces
+pnpm test              # vitest
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+pnpm --filter cli cli --help          # the ContentMonster CLI
+pnpm --filter cli cli steps           # list the ad-pipeline steps
+```
 
-## Learn More
+## Start here
 
-To learn more about Next.js, take a look at the following resources:
+- **What this is + decisions:** [`docs/core-charter/contentmonster-charter.md`](docs/core-charter/contentmonster-charter.md)
+- **How we build:** [`docs/tools/gstack/use-gstack.md`](docs/tools/gstack/use-gstack.md) · [`docs/engineering-standards.md`](docs/engineering-standards.md)
+- **Agent project memory:** `CLAUDE.md`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Requires Node `>=20` and pnpm (`packageManager` pins the version). Secrets live in
+`.env*` / `credentials/` (gitignored) — never committed.
