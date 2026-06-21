@@ -1,0 +1,16 @@
+# Build outputs & deps
+node_modules
+.next
+out
+dist
+build
+.turbo
+coverage
+pnpm-lock.yaml
+
+# Hand-authored docs + tenant JSON — Prettier governs code, not our prose.
+# (Keeps the charter, brainstorm docs, client configs, and platform specs as written.)
+*.md
+docs/
+clients/
+platform/

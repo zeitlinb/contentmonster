@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Native deps allowed to run build scripts. sharp = Next/Sharp image pipeline,
+# unrs-resolver = eslint/oxc resolver, esbuild = tsx + vitest transform engine.
+# All trusted; pnpm 11 writes its approvals into this list.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
