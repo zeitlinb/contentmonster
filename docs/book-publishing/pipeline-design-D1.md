@@ -3,7 +3,7 @@ title: Book-publishing pipeline design (charter D1) — captured design proposal
 date: 2026-06-22
 status: DEFERRED — this is the AUTOMATION phase (build AFTER book #1 ships, per the hand-craft-first decision). Captured durably; NOT settled. Two reconciliations applied (see top).
 source: multi-agent design workflow (13 agents, ~1.6M tokens) — verified vs the claude-api skill + KDP docs
-relates_to: docs/runbooks/kdp-publishing-runbook.md; docs/research/book-publishing/2026-06-22-operator-playbook-and-economics.md; [[project-book-pipeline-strategy]]
+relates_to: kdp-publishing-runbook.md; research/2026-06-22-operator-playbook-and-economics.md (hub: README.md); [[project-book-pipeline-strategy]]
 ---
 
 # Book pipeline design (D1) — captured for the post-#1 automation phase

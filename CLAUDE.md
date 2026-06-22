@@ -13,6 +13,7 @@ First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surf
 ## Read these (canon)
 
 - **`docs/core-charter/contentmonster-charter.md`** — distilled source of truth: identity, settled decisions, open decisions (D1–D5). **Start here for *what* we're building.**
+- **`docs/book-publishing/`** — the **books category** (the active workstream). Read its `README.md` first: it hubs the KDP runbook, the automated-pipeline design, and all book research. Content pipelines are organized by category folder (books here; ad-creative/other content get sibling folders).
 - **`docs/core-charter/brainstorm/`** — dated working docs where decisions get argued before promotion to the charter.
 - **`docs/engineering-standards.md`** — readiness board (build/test/CI/gates/flow), live status + the gaps the agent still owes.
 - **`docs/tools/gstack/use-gstack.md`** — *how we build here* (the methodology). **Read before writing code.**
@@ -64,4 +65,6 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 - **Monorepo migration MERGED to main** (PR #1, 2026-06-22; Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`). CI + Vercel green; Vercel Root Directory = `apps/web`. Newest `docs/state/` file is the resume point.
 - **gstack:** global + namespaced (`/gstack-*`), trial mode (not team-pinned). `VERSION` 0.1.0.0 (== `package.json`).
 - **DB deferred** (file-based JSON + Zod; `packages/db` slot open). No app logic yet — `packages/core` modules are typed stubs.
-- **Next:** the book-publishing pipeline (charter D1), then resume the ad pipeline (Drive sync → generate-scene; needs Remotion + provider SDKs — D2/D3).
+- **Books pipeline (D1) = the active workstream** — research + design phase (see `docs/book-publishing/`). Niche SET (Brad's domains); first title = AI Chief of Staff; KPI = hybrid (provisional); hand-craft #1 then automate; Mode A. Mid-`/last30days` demand sweep. The newest `docs/state/` file is the resume point.
+- **`/last30days` upgraded v2.1 → v3.8.0** this session (Reddit was dead; now fixed). Global skill at `~/Documents/Henry/skills/last30days/skills/last30days/`; needs Python 3.12+; ScrapeCreators key set. See `docs/tools/last30days/reference.md`.
+- **Then:** resume the ad pipeline (Drive sync → generate-scene; needs Remotion + provider SDKs — D2/D3).
