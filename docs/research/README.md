@@ -40,6 +40,7 @@ raw evidence (handles/URLs/engagement) so claims stay verifiable.
 - [2026-06-22 — operator playbook + economics](book-publishing/2026-06-22-operator-playbook-and-economics.md) — funnel-vs-revenue evidence, operator teardowns, length/price, domain demand, decision forks, account-critical risks. Produces the runbook.
 - [2026-06-22 — last30days: KDP step-by-step process](book-publishing/2026-06-22-last30days-kdp-stepbystep-process.md) — confirms the runbook process/pricing; +category/keyword ranking mechanics; long-term-impact algorithm; ARC-review compliance nuance. Credible operators: Book Launchers, Myron Golden.
 - [2026-06-22 — last30days: length & pricing](book-publishing/2026-06-22-last30days-length-pricing.md) — confirms ~25k words / $4.99; surfaces HYBRID pricing upside ($6.99–$9.99 brand-justified) + length band (30–40k if revenue weight rises); funnel doctrine triple-confirmed. Demand still untested.
+- [2026-06-22 — last30days: GEO/AI-SEO demand](book-publishing/2026-06-22-last30days-geo-aiseo-demand.md) — FIRST run with Reddit live. GEO is demand-rich but supply-SATURATED (≥6 books incl. Ross Hudgens); confirms "GEO is book #2, differentiate." AI-Chief-of-Staff demand still untested (the key one).
 
 ### related (outside docs/research)
 - [KDP publishing runbook](../runbooks/kdp-publishing-runbook.md) — the granular zero→published playbook produced from the above.
