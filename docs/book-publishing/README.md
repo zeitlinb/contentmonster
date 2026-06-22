@@ -10,13 +10,16 @@
 
 ## Where we are
 Heavy **research + design phase, no book-pipeline code yet.** The niche is SET (Brad's own
-domains). We have a granular KDP runbook, a captured automated-pipeline design, and 5 research
-artifacts. We are **mid-`/last30days` demand sweep** (don't lock conclusions until it's done).
+domains). We have a granular KDP runbook, a captured automated-pipeline design, and the research
+corpus. The **`/last30days` demand sweep is COMPLETE (3/3 runs, 2026-06-22)** and the nespola_io
+operator teardown is done. **Final strategy lock awaits Brad's ratification** (recommended lock:
+funnel-first KPI · AI Chief of Staff #1 · GEO #2 · GTM #3-or-defer) before charter D1 economics is
+updated and book #1 begins.
 
 ## Locked decisions (Brad, 2026-06-22)
 - **Series = ~5 short authority/nonfiction books** in Brad's domains: AI Chief of Staff (openclaw/Hermes), GEO/AI-SEO ("get found by ChatGPT/LLMs"), GTM engineering, +2 adjacent.
 - **First title = AI Chief of Staff** (the one true white-space term; GEO is demand-rich but book-shelf-SATURATED → book #2 with differentiation).
-- **KPI = TRUE HYBRID** (build the funnel AND optimize royalties; track both). NOTE: the funnel-vs-revenue *economics* is still **PROVISIONAL** pending the rest of the demand sweep.
+- **KPI = funnel-first** (hybrid: track both royalties and qualified leads, optimize the backend). The demand sweep (run 3, book-funnel→high-ticket) **validated** funnel-first with hard guardrails (back-of-book funnel = publish precondition; free→paid leakage is the default failure). Final lock pending Brad's ratification.
 - **Hand-craft book #1, then automate** — and the manual build's PURPOSE is to **capture the how-to knowledge layer** as the spec for the `packages/core` automation.
 - **Mode A** production: human-written prose, AI only outlines/researches/edits (honest "AI-assisted" disclosure + enforceable copyright). The automated design must augment, not replace, authorship.
 - Specs: ~22–28k words (30–40k if revenue weight rises) · ebook **$4.99** (brand-justified upside to **$6.99–$9.99**) · paperback **$13.99–$14.99** · **wide** (no KU) · **real name** · free KDP ASIN/ISBN.
@@ -38,9 +41,13 @@ artifacts. We are **mid-`/last30days` demand sweep** (don't lock conclusions unt
 - `2026-06-22-last30days-kdp-stepbystep-process.md` — process/pricing confirmation + category/keyword ranking mechanics.
 - `2026-06-22-last30days-length-pricing.md` — length/price norms + the hybrid pricing upside.
 - `2026-06-22-last30days-geo-aiseo-demand.md` — GEO demand-rich but supply-saturated (≥6 books); confirms GEO = #2.
+- `2026-06-22-last30days-ai-cos-demand.md` — **sweep run 1/3:** AI Chief of Staff demand; concept buyer-pull strong, book-shaped demand = lead-magnet "teach me" behavior; white space holds → #1.
+- `2026-06-22-last30days-gtm-engineering-demand.md` — **sweep run 2/3:** GTM engineering hot role but book shelf already saturated (GEO pattern), narrow buyer → #3 or defer.
+- `2026-06-22-last30days-book-funnel-high-ticket.md` — **sweep run 3/3:** validates funnel-first KPI (math favors it; back-of-book funnel is a precondition).
+- `2026-06-22-operator-teardown-nespola.md` — nespola_io = Tommi Pedruzzi corporatized; steal thin metadata/funnel mechanics, reject the model; customer whole-account KDP bans.
 
-## Remaining work (next session)
-1. **Finish the `/last30days` demand sweep** (Brad-invoked; don't shortcut — `[[feedback-dont-shortcut-research-pace]]`): **AI Chief of Staff demand** (the key one — our first title), **GTM engineering demand**, **funnel/lead-magnet** angle.
-2. **Operator teardowns of specific people Brad named** — start with **[nespola_io](https://x.com/nespola_io)** (+ a couple more Brad will name). Same treatment as the Tommi teardown; fold into `research/`.
-3. **Then** lock strategy → start the **instrumented hand-craft of book #1 (AI Chief of Staff)**, capturing how-to per runbook phase.
+## Remaining work
+1. ✅ DONE — `/last30days` demand sweep (3/3) + nespola_io operator teardown.
+2. **GATE (Brad):** ratify the strategy lock (funnel-first · AI Chief of Staff #1 · GEO #2 · GTM #3-or-defer) → update charter D1 economics.
+3. **Then** start the **instrumented hand-craft of book #1 (AI Chief of Staff)**, capturing how-to per runbook phase.
 4. **Later (deferred):** build the `packages/core` book pipeline from the captured how-to + `pipeline-design-D1.md`.

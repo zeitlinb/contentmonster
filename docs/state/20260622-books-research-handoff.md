@@ -12,6 +12,14 @@ files_modified:
 
 # Handoff — Books research + design done; demand sweep in progress (2026-06-22)
 
+> **⚠️ SUPERSEDED (2026-06-22, later same day).** The `/last30days` demand sweep is now
+> COMPLETE (3/3 runs) and the nespola_io operator teardown is done — see
+> `docs/book-publishing/research/` (digests + teardown) and `docs/book-publishing/README.md`
+> for current status. Verdict: AI Chief of Staff #1, GEO #2, GTM #3-or-defer, funnel-first
+> KPI validated; **final strategy lock pending Brad's ratification.** Also this session:
+> ContentMonster became **HyperFrames-first** (see the charter + `docs/reference/hyperframes-pipeline.md`).
+> The body below is the earlier mid-sweep snapshot, kept as a dated record.
+
 ### Summary
 Built the books-publishing pipeline knowledge base this session: a granular KDP runbook, a
 captured automated-pipeline design, and 5 research artifacts — all reorganized under a new

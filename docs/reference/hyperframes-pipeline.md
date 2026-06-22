@@ -15,7 +15,7 @@ Remotion-based flow. We are now HyperFrames-first, so video production follows t
 below. Each step produces a **named artifact on disk**, so any session (human or agent) can
 track progress, see *why* a beat looks the way it does, and re-enter at any checkpoint.
 **Sharp is unchanged** — it still does pixel ops (bg removal, color grade, shadows) that feed
-Capture/Build. **Remotion is kept as an alt/reference** ([`/remotion-to-hyperframes`](https://hyperframes.heygen.com/guides/hyperframes-vs-remotion.md) ports the other way).
+Capture/Build. **Remotion is kept as an alt/reference** (see [HyperFrames vs Remotion](https://hyperframes.heygen.com/guides/hyperframes-vs-remotion.md); the `/remotion-to-hyperframes` skill ports legacy Remotion sources into HyperFrames).
 
 ## The 7 steps
 
