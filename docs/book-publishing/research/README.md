@@ -19,4 +19,4 @@ raw evidence (handles/URLs/engagement) so claims stay verifiable.
 - Operator teardowns: **[nespola_io](https://x.com/nespola_io)** + others Brad names.
 
 ## Tooling note
-`/last30days` engine was upgraded to **v3.8.0** this session (Reddit was dead on v2.1; now fixed via keyless RSS + ScrapeCreators). Use **default/`--deep`** depth, not `--quick`. See [`../../tools/last30days/reference.md`](../../tools/last30days/reference.md).
+`/last30days` engine was upgraded **v2.1 → v3.8.0 mid-session** (Reddit was dead on v2.1; now fixed via keyless RSS + ScrapeCreators). **Provenance:** the first 3 last30days artifacts (creators, process, length/pricing) ran on **v2.1 with Reddit timed out** (X/YouTube/web only); **only the GEO-demand artifact ran on v3.8.0** with Reddit live (18 threads). Use **default/`--deep`** depth, not `--quick`. See [`../../tools/last30days/reference.md`](../../tools/last30days/reference.md).

@@ -43,7 +43,7 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 |---|----------|--------|-------------|
 | D1 | **Book-publishing pipeline shape** — manuscript → layout → cover → KDP formats; which AI models; QA rubric for prose. | IN PROGRESS (active workstream — design captured, demand sweep underway) | [`../book-publishing/`](../book-publishing/) (hub + runbook + design + research) |
 | D2 | **Remotion adoption** — required for ad pipeline steps 3/4/7 but not yet a dependency. When/how to add. | OPEN | [`../reference/tech-decisions.md`](../reference/tech-decisions.md) |
-| D3 | **Headless QA auth** — Pass 2 is "we are Claude" interactively; needs `ANTHROPIC_API_KEY` when run headless/CI. | CLOSED for prose (require key, fail-loud on refusal — see D1 design) | [`../book-publishing/pipeline-design-D1.md`](../book-publishing/pipeline-design-D1.md) |
+| D3 | **Headless QA auth** — Pass 2 is "we are Claude" interactively; needs `ANTHROPIC_API_KEY` when run headless/CI. | DECIDED in design (require key, fail-loud on refusal); implements when the deferred pipeline is built | [`../book-publishing/pipeline-design-D1.md`](../book-publishing/pipeline-design-D1.md) |
 | D4 | **Database** — when to stand up Supabase and what it persists (asset tracking, book metadata, sales). | DEFERRED | — |
 | D5 | **gstack mode** — trial/global now; revisit team-mode if collaborators join. | TRIAL | [`../tools/gstack/use-gstack.md`](../tools/gstack/use-gstack.md) |
 

@@ -29,7 +29,7 @@ artifacts. We are **mid-`/last30days` demand sweep** (don't lock conclusions unt
 | Doc | What it is |
 |---|---|
 | [`kdp-publishing-runbook.md`](kdp-publishing-runbook.md) | The literal click-by-click **zero → published** playbook (11 phases, who-does-what, gotchas, `[VERIFY]` tags). Also the **automation spec** for book #1's instrumented build. |
-| [`pipeline-design-D1.md`](pipeline-design-D1.md) | Captured **automated `packages/core` pipeline design** (Typst typesetting, 9-dim prose-QA rubric, run-ledger). **DEFERRED** to the post-#1 automation phase. Closes charter D3. |
+| [`pipeline-design-D1.md`](pipeline-design-D1.md) | Captured **automated `packages/core` pipeline design** (Typst typesetting, two-pass prose-QA rubric: 8 fiction / 9 nonfiction dims, run-ledger). **DEFERRED** to the post-#1 automation phase. Decides charter D3 (implements when built). |
 | [`research/`](research/) | All book research artifacts + index. See [research/README.md](research/README.md). |
 
 ### Research artifacts ([research/](research/))

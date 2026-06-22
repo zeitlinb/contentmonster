@@ -5,7 +5,7 @@ query: "demand for books on AI SEO, getting found by ChatGPT and LLMs, and GEO"
 window: 2026-05-23 → 2026-06-22 (30d)
 query_type: GENERAL (demand validation)
 status: raw research — FIRST run with Reddit live (engine fixed). Demand test for the GEO/AI-SEO book (series candidate #2).
-relates_to: [[project-book-pipeline-strategy]]; docs/research/book-publishing/2026-06-22-operator-playbook-and-economics.md
+relates_to: [[project-book-pipeline-strategy]]; 2026-06-22-operator-playbook-and-economics.md
 ---
 
 # last30days — GEO / AI-SEO demand (2026-06-22)

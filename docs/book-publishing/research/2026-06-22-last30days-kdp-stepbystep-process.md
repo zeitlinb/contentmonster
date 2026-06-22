@@ -5,7 +5,7 @@ query: "best way to self-publish a short nonfiction authority book on Amazon KDP
 window: 2026-05-23 → 2026-06-22 (30d)
 query_type: GENERAL / HOW-TO (process consensus, not demand)
 status: raw research — CONFIRMS the runbook process; does NOT test funnel-vs-revenue demand (that's the ④ demand run)
-relates_to: docs/runbooks/kdp-publishing-runbook.md; [[project-book-pipeline-strategy]]
+relates_to: ../kdp-publishing-runbook.md; [[project-book-pipeline-strategy]]
 ---
 
 # last30days — KDP step-by-step process consensus (2026-06-22)

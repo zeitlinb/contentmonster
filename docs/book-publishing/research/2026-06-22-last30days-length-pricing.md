@@ -5,7 +5,7 @@ query: "ideal word count and price for a short business nonfiction Kindle book"
 window: 2026-05-23 → 2026-06-22 (30d)
 query_type: GENERAL (length/price norms)
 status: raw research — confirms length/price; surfaces a HYBRID pricing upside. Does NOT test demand (④ still open).
-relates_to: docs/runbooks/kdp-publishing-runbook.md; [[project-book-pipeline-strategy]]
+relates_to: ../kdp-publishing-runbook.md; [[project-book-pipeline-strategy]]
 ---
 
 # last30days — length & price norms (2026-06-22)

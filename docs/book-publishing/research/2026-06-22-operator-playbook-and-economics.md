@@ -3,7 +3,7 @@ source: multi-agent research workflow (6 gather agents + 2 adversarial critics +
 date: 2026-06-22
 query: who succeeds publishing AI-era authority books + how; length/price/positioning; our-domain demand; granular KDP runbook
 status: synthesized + adversarially verified (compliance + completeness critics). [VERIFY] items flagged inline.
-produces: docs/runbooks/kdp-publishing-runbook.md
+produces: ../kdp-publishing-runbook.md
 relates_to: charter D1; [[project-book-pipeline-strategy]]
 ---
 
