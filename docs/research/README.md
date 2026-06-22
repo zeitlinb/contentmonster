@@ -37,3 +37,7 @@ raw evidence (handles/URLs/engagement) so claims stay verifiable.
 
 ### book-publishing
 - [2026-06-22 — last30days: AI authority-book creators](book-publishing/2026-06-22-last30days-ai-authority-book-creators.md) — who's teaching write-&-sell-with-AI; legit vs. hype split.
+- [2026-06-22 — operator playbook + economics](book-publishing/2026-06-22-operator-playbook-and-economics.md) — funnel-vs-revenue evidence, operator teardowns, length/price, domain demand, decision forks, account-critical risks. Produces the runbook.
+
+### related (outside docs/research)
+- [KDP publishing runbook](../runbooks/kdp-publishing-runbook.md) — the granular zero→published playbook produced from the above.
