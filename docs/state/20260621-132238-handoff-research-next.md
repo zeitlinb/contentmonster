@@ -1,6 +1,6 @@
 ---
-status: migration complete + green on PR #1 (unmerged); next session = research
-branch: migrate/monorepo-turborepo-pnpm (PR #1 open, NOT merged)
+status: migration MERGED to main (PR #1); next session = research
+branch: main (PR #1 merged 2026-06-22, branch deleted)
 timestamp: 2026-06-21 13:22
 supersedes: docs/state/20260621-112135-monorepo-migration.md
 files_modified:
@@ -12,9 +12,9 @@ files_modified:
 # Handoff — Migration done; research is next (2026-06-21 13:22)
 
 ### Summary
-The Turborepo + pnpm monorepo migration is **built, pushed, and fully green** on PR #1
-(CI + Vercel both pass); Brad holds the merge. Next session's first work is **research**:
-run `/last30days` to scout book niches/demand, then design the book-publishing pipeline.
+The Turborepo + pnpm monorepo migration is **merged to main** (PR #1, 2026-06-22; CI + Vercel
+green; branch deleted). Next session's first work is **research**: run `/last30days` to scout
+book niches/demand, then design the book-publishing pipeline.
 
 ### Next Move
 **Run book-niche research via `/last30days <topic>` (Brad types it), then design the book-publishing pipeline (charter D1).**
@@ -23,7 +23,7 @@ run `/last30days` to scout book niches/demand, then design the book-publishing p
 - `Do NOT read:` `node_modules`, `pnpm-lock.yaml`, `.next/`; the pre-monorepo `docs/state/20260227-state-handoff.md` (historical, superseded — Windows paths are from another machine).
 
 ### Snapshot (deltas not visible from git status)
-- **PR #1 OPEN, green, unmerged.** Branch `migrate/monorepo-turborepo-pnpm` = 7 bisectable commits. Merging is Brad's call.
+- **PR #1 MERGED to main** (2026-06-22, merge commit `5fda23a`; branch deleted). 8 bisectable commits preserved on main. You are on `main`.
 - Repo shape: `apps/web` (Next 16.2.7) · `apps/cli` (commander/tsx) · `packages/core` (`@contentmonster/core`, typed stubs) · `docs/` doctrine · `clients/jaca` + `platform/` unchanged.
 - **Vercel fixed:** project Root Directory → `apps/web` (was null). Persisted; future builds incl. main-on-merge are correct. Details in `reference-vercel-deploy` memory.
 - **`/last30days` becomes a slash command only after a fresh session restart** (project skills enumerate at startup). It works via the global symlink today; creds self-load from `~/.config/last30days/.env` (OPENAI + XAI verified true).
@@ -39,7 +39,7 @@ run `/last30days` to scout book niches/demand, then design the book-publishing p
 
 ### Remaining Work (priority order)
 1. **Research → book pipeline design (charter D1)** — CARRIED. Next-session first move; `/last30days` then design manuscript→layout→cover→KDP + prose-QA rubric.
-2. **Merge PR #1** — CARRIED. Brad-gated; optionally run `/gstack-review` + `/gstack-codex` + `/gstack-ship` first (he chose push+PR only for now → that ship step is DROPPED unless he asks).
+2. **Merge PR #1** — CLOSED (merged to main 2026-06-22, branch deleted). The formal `/gstack-review` + `/gstack-codex` + `/gstack-ship` were DROPPED for this migration (Brad chose push → PR → merge).
 3. **Resume ad pipeline** — CARRIED. Drive-sync CLI → `generate-scene`; needs Remotion + provider SDKs (charter D2/D3). After books.
 4. Pre-monorepo next-steps (Drive setup, generate-scene) — CLOSED as standalone items; folded into `docs/runbooks/google-drive-setup.md` + charter.
 5. T5/T6 + push decision from the 11:21 checkpoint — CLOSED (done, pushed, PR green).

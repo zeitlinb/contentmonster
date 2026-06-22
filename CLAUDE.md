@@ -59,9 +59,9 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 - Verified server/API/browser claims — not "it should work."
 - Private repos; secrets gitignored; confirm before anything public or a new external destination.
 
-## Current status (2026-06-21)
+## Current status (2026-06-22)
 
-- **Monorepo migration** on branch `migrate/monorepo-turborepo-pnpm` (Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`). Locally verified (install / check-types 3/3 / build / cli). **Not pushed** — awaiting Brad's go on push + PR + the formal gstack review/ship.
+- **Monorepo migration MERGED to main** (PR #1, 2026-06-22; Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`). CI + Vercel green; Vercel Root Directory = `apps/web`. Newest `docs/state/` file is the resume point.
 - **gstack:** global + namespaced (`/gstack-*`), trial mode (not team-pinned). `VERSION` 0.1.0.0 (== `package.json`).
 - **DB deferred** (file-based JSON + Zod; `packages/db` slot open). No app logic yet — `packages/core` modules are typed stubs.
 - **Next:** the book-publishing pipeline (charter D1), then resume the ad pipeline (Drive sync → generate-scene; needs Remotion + provider SDKs — D2/D3).
