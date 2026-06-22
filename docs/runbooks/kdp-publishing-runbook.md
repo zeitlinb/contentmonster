@@ -14,6 +14,14 @@ relates_to: [[project-book-pipeline-strategy]]
 > `(agent)` / `(either)`. Phases 0–2 are **one-time** account setup; Phases 3–10 repeat
 > **per book**. `[VERIFY]` = re-check against the live KDP UI / Brad's accountant before acting.
 
+> **⚙️ PURPOSE — this runbook is the automation spec.** Book #1 (AI Chief of Staff) is
+> hand-crafted manually *to capture the "how-to" knowledge layer* so each phase can be
+> **promoted to an automation in `packages/core`** (empire model: do manually → instrument →
+> automate). As we execute, every phase produces a **capture artifact** — actual inputs/
+> prompts/tools used, the quality bar, and the human-judgment-vs-automatable boundary — which
+> becomes the spec for its automate-this ticket. This file is the manual process *and* the
+> blueprint for replacing it.
+
 ## Locked spec (per book)
 - **Length:** ~22,000–28,000 words / ~100–120 pages, ~2-hr read. **Hard floor 18,000 words** (below = "too brief" reviews + KDP "disappointing content" exposure). 8–12 chapters of ~1,500–2,500 words around **one named framework**.
 - **Price:** ebook **$4.99** standing (70% band; ~$3.43 net), **$0.99** launch week only; paperback **$13.99–$14.99** (clears the 60% print tier); GEO book may justify $6.99.
