@@ -29,9 +29,11 @@ metadata:
       - prompts
 ---
 
-## Local Config
+## Local Config (engine upgraded to v3.8.0 on 2026-06-22)
 - **Config path:** `~/.config/last30days/.env`
-- **Keys used:** `OPENAI_API_KEY`, `XAI_API_KEY`
+- **Keys used:** `OPENAI_API_KEY`, `XAI_API_KEY`, `SCRAPECREATORS_API_KEY` (SC powers TikTok/Instagram/Threads + is the Reddit backup; Reddit's primary path is keyless RSS — no key needed).
+- **Python:** v3 requires **3.12+** (system `python3` is 3.9; the runner below resolves `python3.12`).
+- **Reddit:** direct `reddit.com` 403-blocks all HTTP now; v3's keyless RSS path is the working path. Use **default or `--deep`** depth — `--quick` is too shallow and culls Reddit to ~1 thread.
 
 # last30days v2.1: Research Any Topic from the Last 30 Days
 
@@ -107,7 +109,17 @@ if [ -z "${SKILL_ROOT:-}" ]; then
   exit 1
 fi
 
-python3 "${SKILL_ROOT}/scripts/last30days.py" "$ARGUMENTS" --emit=compact
+# last30days v3 requires Python 3.12+ (system python3 is often 3.9). Resolve one.
+PY=""
+for c in python3.14 python3.13 python3.12 python3; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c 'import sys; sys.exit(0 if sys.version_info[:2] >= (3,12) else 1)' 2>/dev/null; then PY="$c"; break; fi
+done
+if [ -z "$PY" ]; then
+  echo "ERROR: last30days v3 needs Python 3.12+; none found (try: brew install python@3.12)" >&2
+  exit 1
+fi
+
+"$PY" "${SKILL_ROOT}/scripts/last30days.py" "$ARGUMENTS" --emit=compact
 ```
 
 Use a **timeout of 300000** (5 minutes) on the Bash call. The script typically takes 1-3 minutes.
