@@ -6,7 +6,7 @@ Source: CLI-test-spec.pdf page 12-13. These are mistakes the previous AI made.
 
 2. **Nano Banana doesn't control aspect ratio.** The --resolution flag controls max dimension, not aspect ratio. MUST include explicit aspect ratio in the prompt ("vertical 4:5 portrait orientation, 1080 wide by 1350 tall") AND verify/crop output after generation.
 
-3. **Remotion is the compositing engine, not Pillow/Sharp.** Sharp handles pixel-level ops (bg removal, color grading, shadows). Remotion handles ALL layout (text, logo, pills, CTA, safe zones, size variants). Do not substitute one for the other.
+3. **HyperFrames is the compositing/layout engine (default), not Pillow/Sharp.** Sharp handles pixel-level ops (bg removal, color grading, shadows). HyperFrames handles ALL layout (text, logo, pills, CTA, safe zones, size variants) via deterministic HTML render. (Remotion is kept as an alt/reference.) Do not substitute pixel-ops and layout for each other.
 
 4. **Vision QA runs after EVERY step, before any human sees output.** Loop: generate → Gemini spec check → Claude creative review → fix → repeat. Human sees only the final passing result.
 

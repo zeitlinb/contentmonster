@@ -29,7 +29,7 @@
 - **Pouch**: DO NOT feed into AI (garbles text). Generate scene only, composite real photo.
 - **Jolt bottle**: OK to feed as input (simple bold graphics render correctly)
 - **People**: NEVER feed into AI (distorts faces). Composite real UGC photos.
-- **Text**: NEVER rely on AI-rendered text — always use Remotion
+- **Text**: NEVER rely on AI-rendered text — always use HyperFrames (deterministic layout engine; Remotion kept as alt/reference)
 
 ## Negative Constraints (append to EVERY prompt)
 "No text overlays, no typography, no logos, no watermarks, no distorted text on packaging, no extra fingers, no deformed objects, no over-smoothed textures, no heavy HDR glow, no cartoon elements"

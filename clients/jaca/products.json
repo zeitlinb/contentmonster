@@ -9,7 +9,7 @@
       "aiRules": {
         "canFeedToAI": false,
         "reason": "Garbles packaging text — generate scene ONLY, composite real product photo on top",
-        "compositeMethod": "background-removal + drop-shadow + color-matching via Sharp, then position via Remotion"
+        "compositeMethod": "background-removal + drop-shadow + color-matching via Sharp, then position via HyperFrames"
       },
       "bestProductPhoto": "1-PSWALrjxRxnRegMugCGjjSAkMjCwcxM.jpg",
       "attributes": {

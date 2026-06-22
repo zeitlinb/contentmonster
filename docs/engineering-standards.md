@@ -13,7 +13,7 @@
 - ✅ `packages/core` ships raw TS via exports map; consumed by web (`transpilePackages`) and cli (tsx).
 - ✅ Prettier at root (code-only; prose/`docs/`/`clients/` excluded). ESLint per-app, flat config + `eslint-config-prettier`.
 - ✅ Node `>=20`, pnpm pinned via `packageManager`. Native builds (sharp/esbuild/unrs-resolver) approved in `pnpm-workspace.yaml`.
-- ⚠️ **Remotion** not yet a dependency — required for ad pipeline layout/video (charter D2).
+- ✅ **HyperFrames = layout/video engine** (default, 2026-06-22) — installed via agent skills + `npx hyperframes` CLI; HTML compositions, deterministic Chrome-capture → FFmpeg render. Remotion kept as an available alt/reference (not a dependency).
 
 ## Testing
 - ✅ Vitest wired in every workspace (`test` script, `--passWithNoTests`).

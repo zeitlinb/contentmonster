@@ -1,5 +1,5 @@
 // Sharp-based pixel ops: background removal, color grading, shadows, resize, crop.
-// Layout/compositing (text, logo, pills, CTA) is Remotion's job, NOT this module
+// Layout/compositing (text, logo, pills, CTA) is HyperFrames' job, NOT this module
 // (see docs/reference/tech-decisions.md). Implementation lands later.
 
 export interface CompositeOptions {
