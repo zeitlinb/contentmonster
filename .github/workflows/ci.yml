@@ -1,0 +1,50 @@
+# ContentMonster CI — one app job: typecheck, build, unit tests.
+# No database job yet (DB deferred — see the charter, decision D4).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    # Docs/state handoffs go straight to main by standing protocol — don't burn
+    # a CI run on them. PRs are never filtered.
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Cancel superseded runs on PRs only; every main commit keeps a completed run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Opt JS actions onto Node 24 ahead of GitHub's forced cutover, so CI proves they
+# run clean before we're forced over.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the pnpm version from "packageManager" in package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm check-types
+
+      - run: pnpm build
+
+      - run: pnpm test
