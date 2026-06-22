@@ -24,7 +24,7 @@ relates_to: [[project-book-pipeline-strategy]]
 
 ## Locked spec (per book)
 - **Length:** ~22,000–28,000 words / ~100–120 pages, ~2-hr read. **Hard floor 18,000 words** (below = "too brief" reviews + KDP "disappointing content" exposure). 8–12 chapters of ~1,500–2,500 words around **one named framework**.
-- **Price:** ebook **$4.99** standing (70% band; ~$3.43 net), **$0.99** launch week only; paperback **$13.99–$14.99** (clears the 60% print tier); GEO book may justify $6.99.
+- **Price:** ebook **$4.99** to launch / build audience (70% band; ~$3.43 net), **$0.99** launch week only. **Hybrid upside:** business/prescriptive nonfiction commands **$6.99–$9.99** with a strong brand (Brad has it; both prices are in the same 70% band) — step later titles up as the series earns authority ($9.99 → ~$6.84/sale). Paperback **$13.99–$14.99** (clears the 60% print tier).
 - **Formats:** ebook + paperback every title (paperback = the physical credential). Hardcover optional, flagship/post-launch only.
 - **Distribution:** **WIDE** — no KDP Select/KU (it blocks the free portfolio-wide lead-magnet use). Optional one-time 90-day Select launch window with a **calendared day-90 opt-out** only.
 - **Identity:** Brad's **real name** (the authority asset). Free KDP ASIN (ebook) + free KDP ISBN (print).

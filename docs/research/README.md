@@ -39,6 +39,7 @@ raw evidence (handles/URLs/engagement) so claims stay verifiable.
 - [2026-06-22 — last30days: AI authority-book creators](book-publishing/2026-06-22-last30days-ai-authority-book-creators.md) — who's teaching write-&-sell-with-AI; legit vs. hype split.
 - [2026-06-22 — operator playbook + economics](book-publishing/2026-06-22-operator-playbook-and-economics.md) — funnel-vs-revenue evidence, operator teardowns, length/price, domain demand, decision forks, account-critical risks. Produces the runbook.
 - [2026-06-22 — last30days: KDP step-by-step process](book-publishing/2026-06-22-last30days-kdp-stepbystep-process.md) — confirms the runbook process/pricing; +category/keyword ranking mechanics; long-term-impact algorithm; ARC-review compliance nuance. Credible operators: Book Launchers, Myron Golden.
+- [2026-06-22 — last30days: length & pricing](book-publishing/2026-06-22-last30days-length-pricing.md) — confirms ~25k words / $4.99; surfaces HYBRID pricing upside ($6.99–$9.99 brand-justified) + length band (30–40k if revenue weight rises); funnel doctrine triple-confirmed. Demand still untested.
 
 ### related (outside docs/research)
 - [KDP publishing runbook](../runbooks/kdp-publishing-runbook.md) — the granular zero→published playbook produced from the above.
