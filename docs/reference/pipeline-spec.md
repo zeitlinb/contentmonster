@@ -1,13 +1,20 @@
-# Content Automation Pipeline — 8 Steps
+# Content Automation Pipeline — 8 Steps (legacy ad-engine spec)
 
 Source: CLI-test-spec.pdf (14 pages)
+
+> ⚠️ **Superseded as the production standard (2026-06-22).** ContentMonster is now a
+> **HyperFrames-first** shop and video production follows the **HyperFrames 7-step pipeline**
+> — see [`hyperframes-pipeline.md`](hyperframes-pipeline.md). This 8-step doc is the original
+> ad-creative engine spec, kept for its step/QA detail; the tool labels below now read
+> **HyperFrames** (the default layout/video engine). Remotion is retained only as an alt/reference.
+> Sharp (pixel ops) and the two-pass Vision QA are unchanged.
 
 ## Step 0 — Prerequisites
 Before ANY generation:
 1. Extract transparent logo versions from brand files (remove black backgrounds)
 2. Download Roboto Slab font (Bold + Light)
 3. Identify best clean product photo for compositing
-4. Create Remotion compositions for layout types
+4. Create HyperFrames compositions for layout types
 
 ## Step 1 — Scene Generation
 - **Tool**: Nano Banana 2 (Gemini 3.1 Flash Image)
@@ -22,15 +29,15 @@ Before ANY generation:
 - **Processing**: Remove bg → color-grade to match scene → directional lighting → blur edges for DOF → contact shadow + ambient shadow → surface reflection → position at correct scale
 - **QA**: Composite-specific checks (fringing, color match, shadow direction, scale)
 
-## Step 3 — Text & Logo Overlay (Remotion)
-- **Tool**: Remotion — NOT Sharp/Pillow
+## Step 3 — Text & Logo Overlay (HyperFrames)
+- **Tool**: HyperFrames — NOT Sharp/Pillow
 - **Input**: Composite + brand assets
-- **Remotion template implements**: background, headline (Roboto Slab Bold, stroked), 2-3 attribute pills, logo (transparent bg, 2-2.5x size), CTA bar, safe zone enforcement
+- **HyperFrames composition implements**: background, headline (Roboto Slab Bold, stroked), 2-3 attribute pills, logo (transparent bg, 2-2.5x size), CTA bar, safe zone enforcement
 - **Output**: 1080x1350 PNG (4:5)
 - **QA**: Full spec checklist + 8-dimension rubric
 
 ## Step 4 — Size Variant (1:1 from 4:5)
-- **Tool**: Remotion — same template, different Composition dimensions
+- **Tool**: HyperFrames — same composition, different dimensions/variables
 - **CRITICAL**: NOT a crop. Repositioned layout — product may move, text resizes, logo moves, pills rearrange
 - **QA**: Both passes on 1:1 version
 
@@ -39,11 +46,11 @@ Before ANY generation:
 - Should converge in ≤3 iterations
 
 ## Step 6 — Full Pipeline End-to-End
-- Chain all steps: brief → generation → composite → Remotion render → QA loop → final output
+- Chain all steps: brief → generation → composite → HyperFrames render → QA loop → final output
 - Track total pipeline time + API cost
 
 ## Step 7 — Video Test
-- **Tools**: FFmpeg (cutting, audio), Remotion (captions, end card, overlays)
+- **Tools**: FFmpeg (cutting, audio), HyperFrames (captions, end card, overlays)
 - **Structure**: Hook (0-3s) → Body (3-12s) → End Card (12-15s)
 - Song over dialogue = FAIL
 - Captions mandatory (83% watch muted)

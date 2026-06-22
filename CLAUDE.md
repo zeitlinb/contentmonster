@@ -48,7 +48,8 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 - **Commit routing:** state checkpoints + artifact/decision-record docs go **straight to main** (no PR); **CODE/config and any doc needing an un-made judgment go branch + PR** for Brad's review.
 - **Read the spec before every generation** — from the file, not memory (`docs/reference/lessons-learned.md`). **Dimension-check output FIRST.**
 - **Vision QA after every step**, before any human sees output.
-- **Sharp = pixel ops; Remotion = ALL layout; never rely on AI-rendered text.**
+- **Sharp = pixel ops; HyperFrames = ALL layout; never rely on AI-rendered text.** HyperFrames-first shop (2026-06-22); Remotion kept as alt/reference.
+- **Video standard = the HyperFrames 7-step pipeline** (`docs/reference/hyperframes-pipeline.md`); start at the `/hyperframes` skill, which routes to the right workflow.
 - **`/last30days <topic>` is Brad-invoked only** (recency research; the agent never auto-fires it).
 - **User Sovereignty:** AI recommends, Brad decides; present + ask before anything irreversible.
 - **One browser daemon:** gstack browser for build-time QA; `claude-in-chrome` MCP for operating-time. Never both.
@@ -64,7 +65,8 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 
 - **Monorepo migration MERGED to main** (PR #1, 2026-06-22; Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`). CI + Vercel green; Vercel Root Directory = `apps/web`. Newest `docs/state/` file is the resume point.
 - **gstack:** global + namespaced (`/gstack-*`), trial mode (not team-pinned). `VERSION` 0.1.0.0 (== `package.json`).
+- **HyperFrames-first (2026-06-22):** default layout/video engine; skills installed (`.agents/skills` + `.claude/skills`), `hyperframes-lab/` smoke test renders green (Node 22 + FFmpeg 8). Standard = the 7-step pipeline (`docs/reference/hyperframes-pipeline.md`). Slash commands (`/hyperframes`, `/product-launch-video`, …) activate on next session reload.
 - **DB deferred** (file-based JSON + Zod; `packages/db` slot open). No app logic yet — `packages/core` modules are typed stubs.
 - **Books pipeline (D1) = the active workstream** — research + design phase (see `docs/book-publishing/`). Niche SET (Brad's domains); first title = AI Chief of Staff; KPI = hybrid (provisional); hand-craft #1 then automate; Mode A. Mid-`/last30days` demand sweep. The newest `docs/state/` file is the resume point.
 - **`/last30days` upgraded v2.1 → v3.8.0** this session (Reddit was dead; now fixed). Global skill at `~/Documents/Henry/skills/last30days/skills/last30days/`; needs Python 3.12+; ScrapeCreators key set. See `docs/tools/last30days/reference.md`.
-- **Then:** resume the ad pipeline (Drive sync → generate-scene; needs Remotion + provider SDKs — D2/D3).
+- **Then:** resume the ad pipeline (Drive sync → generate-scene; needs HyperFrames + provider SDKs — D3).

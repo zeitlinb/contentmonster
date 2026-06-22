@@ -8,11 +8,11 @@ Web app (Next.js App Router) with standalone CLI scripts in src/cli/. Each pipel
 
 ## Image Pixel Ops: Sharp (NOT Pillow)
 Sharp replaces Pillow for: background removal, color grading, drop shadows, lighting adjustments, resize, crop to target dimensions.
-Sharp does NOT do: text overlays, logo placement, layout composition (that's Remotion).
+Sharp does NOT do: text overlays, logo placement, layout composition (that's HyperFrames).
 
-## Layout Compositing: Remotion
-Remotion handles ALL layout: text overlays, headline placement, attribute pills, logo, CTA bars, safe zone enforcement, size variant generation (4:5, 1:1, 9:16).
-React components define templates. Each template accepts props (background image, headline, attributes, logo, colors). Same template code produces all output sizes.
+## Layout Compositing: HyperFrames (default, 2026-06-22)
+HyperFrames handles ALL layout: text overlays, headline placement, attribute pills, logo, CTA bars, safe zone enforcement, size variant generation (4:5, 1:1, 9:16).
+HTML compositions + `data-*` timing attributes define templates; variables parameterize them (background image, headline, attributes, logo, colors) and produce all output sizes via the deterministic Chrome-capture → FFmpeg render. We are a HyperFrames-first shop; **Remotion is kept as an alt/reference** (use `/remotion-to-hyperframes` to port legacy Remotion sources). Production follows the 7-step pipeline in [`hyperframes-pipeline.md`](hyperframes-pipeline.md).
 
 ## AI Scene Generation: Nano Banana 2 (Gemini 3.1 Flash Image)
 Released Feb 26, 2026. Pro-level quality at Flash speed.
@@ -30,9 +30,9 @@ For headless/CLI: will need ANTHROPIC_API_KEY.
 ## Alternative Image Gen: Grok Imagine (xAI)
 Text-to-image only. Cannot edit images. Rate limited (3+ sec between calls).
 
-## Video: FFmpeg + Remotion
-FFmpeg for cutting, audio overlay, compression, ASS subtitle burn-in.
-Remotion for captions, end cards, overlays.
+## Video: FFmpeg + HyperFrames
+FFmpeg for cutting, audio overlay, compression, ASS subtitle burn-in (the HyperFrames render pipeline uses FFmpeg under the hood).
+HyperFrames for captions, end cards, overlays (Remotion kept as alt/reference).
 Note: FFmpeg drawtext filter may not be available — use ASS subtitles.
 
 ## Config: JSON + Zod

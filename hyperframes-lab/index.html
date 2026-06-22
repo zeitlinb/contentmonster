@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0a0a0b;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+      }
+      #title {
+        font-size: 132px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: #f4f1ea;
+      }
+      #rule {
+        width: 360px;
+        height: 3px;
+        background: linear-gradient(90deg, #e8b04b, #c8862b);
+        transform-origin: center;
+      }
+      #sub {
+        font-size: 34px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #8a8780;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="6"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="stage">
+        <h1
+          id="title"
+          class="clip"
+          data-start="0"
+          data-duration="6"
+          data-track-index="1"
+        >
+          ContentMonster
+        </h1>
+        <div
+          id="rule"
+          class="clip"
+          data-start="0"
+          data-duration="6"
+          data-track-index="2"
+        ></div>
+        <div
+          id="sub"
+          class="clip"
+          data-start="0"
+          data-duration="6"
+          data-track-index="3"
+        >
+          HyperFrames pipeline &middot; smoke test
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from("#title", { opacity: 0, y: 60, duration: 1.0, ease: "power3.out" }, 0);
+      tl.from("#rule", { scaleX: 0, opacity: 0, duration: 0.8, ease: "power2.out" }, 0.5);
+      tl.from("#sub", { opacity: 0, y: 20, duration: 0.9, ease: "power2.out" }, 0.9);
+      tl.to("#stage", { opacity: 0, duration: 0.7, ease: "power1.in" }, 5.3);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

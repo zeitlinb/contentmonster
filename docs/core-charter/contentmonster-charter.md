@@ -5,7 +5,7 @@
 > settled conclusions get promoted up here. If it's still being argued, it belongs
 > in a brainstorm doc with a pointer from §3 Open Decisions.
 >
-> _Last updated: 2026-06-21._
+> _Last updated: 2026-06-22._
 
 ## 1. Identity & Purpose
 
@@ -29,20 +29,22 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 | Date | Decision |
 |------|----------|
 | 2026-02 | **Runtime: TypeScript + Node**, not Python/Pillow. Source: [`../reference/tech-decisions.md`](../reference/tech-decisions.md). |
-| 2026-02 | **Sharp = pixel ops** (bg removal, color grade, shadows, resize). **Remotion = ALL layout** (text, logo, pills, CTA, safe zones). Never mix. |
-| 2026-02 | **AI scene gen = Nano Banana 2 (Gemini 3.1 Flash Image)**; Grok as alt. **NEVER rely on AI-rendered text** — Remotion owns typography. |
+| 2026-02 | **Sharp = pixel ops** (bg removal, color grade, shadows, resize). **HyperFrames = ALL layout** (text, logo, pills, CTA, safe zones) — default since 2026-06-22; Remotion kept as alt/reference. Never mix pixel-ops with layout. |
+| 2026-02 | **AI scene gen = Nano Banana 2 (Gemini 3.1 Flash Image)**; Grok as alt. **NEVER rely on AI-rendered text** — HyperFrames owns typography (Remotion alt). |
 | 2026-02 | **Two-pass QA after every step:** Pass 1 Gemini Vision (objective spec), Pass 2 Claude Vision (subjective 8-dim rubric, ≥7.0 to pass). |
 | 2026-02 | **Multi-tenant by config:** client rules → `clients/<id>/`; universal platform rules → `platform/`. No client logic hardcoded in system code. |
 | 2026-06-21 | **One content house, multiple pipelines** (ads + books are siblings sharing `packages/core`). |
 | 2026-06-21 | **Turborepo + pnpm monorepo**, modeled on gtmmachines: `apps/web` + `apps/cli` + `packages/core`. gstack as build harness (trial/global). |
 | 2026-06-21 | **Database deferred** — stay file-based (JSON tenant configs + Zod); `packages/db` slot left open. |
+| 2026-06-22 | **HyperFrames-first shop** — HyperFrames is the **default layout/video engine** (HTML compositions, deterministic Chrome-capture → FFmpeg render); installed via agent skills + `npx hyperframes` CLI. Remotion kept as an available alt/reference. |
+| 2026-06-22 | **Video production standard = the HyperFrames 7-step pipeline** (Capture → Design → Script → Storyboard → VO&Timing → Build → Validate). Spec: [`../reference/hyperframes-pipeline.md`](../reference/hyperframes-pipeline.md). |
 
 ## 3. Open Decisions
 
 | # | Decision | Status | Working doc |
 |---|----------|--------|-------------|
 | D1 | **Book-publishing pipeline shape** — manuscript → layout → cover → KDP formats; which AI models; QA rubric for prose. | IN PROGRESS (active workstream — design captured, demand sweep underway) | [`../book-publishing/`](../book-publishing/) (hub + runbook + design + research) |
-| D2 | **Remotion adoption** — required for ad pipeline steps 3/4/7 but not yet a dependency. When/how to add. | OPEN | [`../reference/tech-decisions.md`](../reference/tech-decisions.md) |
+| D2 | **Video/layout engine** — adopted **HyperFrames** as the default (2026-06-22); standard = the 7-step pipeline; Remotion kept as alt/reference. | DECIDED | [`../reference/hyperframes-pipeline.md`](../reference/hyperframes-pipeline.md) |
 | D3 | **Headless QA auth** — Pass 2 is "we are Claude" interactively; needs `ANTHROPIC_API_KEY` when run headless/CI. | DECIDED in design (require key, fail-loud on refusal); implements when the deferred pipeline is built | [`../book-publishing/pipeline-design-D1.md`](../book-publishing/pipeline-design-D1.md) |
 | D4 | **Database** — when to stand up Supabase and what it persists (asset tracking, book metadata, sales). | DEFERRED | — |
 | D5 | **gstack mode** — trial/global now; revisit team-mode if collaborators join. | TRIAL | [`../tools/gstack/use-gstack.md`](../tools/gstack/use-gstack.md) |
