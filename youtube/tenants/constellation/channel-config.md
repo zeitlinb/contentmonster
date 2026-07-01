@@ -12,7 +12,7 @@
 - [x] **Description + Website link + Contact email** live (the refined description below; runconstellation.com; henry@runconstellation.com).
 - [x] **Backup owner `woodfordvideos@gmail.com` added as Owner** via YouTube Studio → Settings → **Permissions** (the modern path; the `myaccount.google.com/brandaccounts` page is EMPTY for this channel — do not use it). Continuity secured.
 - [x] **Verification — ALL THREE tiers** (phone + ID/video). Custom thumbnails, 15-min+ uploads, live streaming, and advanced features unlocked.
-- [~] **Keywords / Country (US) / default language (English)** — provided in Step 6; Brad did not explicitly confirm Save — verify in Settings → Channel → Basic info.
+- [x] **Keywords / Country (US) / default language (English)** — saved (confirmed by Brad, 2026-07-01).
 - [x] **Phase 7 — Agent / API control — DONE (2026-07-01).** Cloud project `constellation-youtube` (proj # `423893530283`, in the runconstellation.com org) → YouTube Data API v3 enabled → **Internal** OAuth app "Constellation YouTube Agent" → **Desktop** client → refresh token minted to `credentials/youtube/constellation/token.json` (0600, gitignored). Smoke test + `operate-youtube.py verify` both confirm the token is bound to **Constellation AI** (`UChonz99tpyIYgvMnUfTTAvA`). **Agents can now upload/manage via the API.**
 
 ## Identity
