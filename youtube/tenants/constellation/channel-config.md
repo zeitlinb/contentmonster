@@ -49,12 +49,11 @@ _(LIVE on the channel as of 2026-06-29.)_
 - **Profile picture concept:** the constellation glyph (white or red) centered on Bedrock Black `#050505`, generous padding (renders as a circle)
 - **Banner concept:** wordmark + tagline **"Get Found. Stay Found. Turn discovery into cash flow."** on Bedrock Black, Constellation Red accent — all inside the **1235×338** safe area; no borders/shadows
 
-## Strategy (from CINT-W-004)
-- **Cadence [CONFIRM]:** start bi-weekly (2–3 videos/month)
-- **Content pillars:** (1) hero/awareness 60–90s; (2) AI-engine deep dives (ChatGPT/Claude/Perplexity/Amazon/local); (3) anonymized case studies (post-Phase-1); (4) founder thought leadership; (5) methodology / "34+ bots cataloged"
-- **First 3 videos [CONFIRM]:** (1) "The way people find businesses has fundamentally changed" (problem intro); (2) "How AI engines find you — and why most businesses are invisible"; (3) "Two Machines. One System."
-- **Funnel:** YouTube description CTA → runconstellation.com → contact / pre-qual
-- **Measurement:** views, subscribers, watch-time, external-link CTR, form-submission attribution; YouTube also valued as an entity-graph signal
+## Strategy — see **`content-strategy.md`** (canonical content plan)
+**Locked 2026-07-01:** **weekly** cadence · **hybrid faceless-first (3:1)** · **high-ticket B2B only** (skip local/"near me" + Amazon/Rufus on this channel) · lead magnet = **"Where are you invisible?" AI-visibility scan** · founder (Henry on-camera) reserved for the **case-study (W3)** + **Two-Machines (W6)** pieces. The **8-week launch slate**, pillars, title/thumbnail conventions, CTA + measurement plan all live in [`content-strategy.md`](content-strategy.md).
+- **Funnel:** video → first-line description CTA → runconstellation.com → scan or pre-qual.
+- **Measurement:** **lead-gen weighted** (qualified applications + attributed scan submissions, NOT views/subs). Secondary: hook retention, decision-maker subs as sales signals. Plus entity-graph value (track Constellation's own AI-visibility across engines).
+- **Refinements open** (see content-strategy.md): W3 lost-revenue math (Henry's line); the "Ask the 5 Engines" evergreen series for wk9+; voice taste-gate on the "Mark" clone before batch #1.
 
 ## Voice & compliance (from brand doctrine)
 - **Voice:** confident, outcome-obsessed, premium-editorial restraint; agent verbs (deploy, optimize, measure, connect). Narration voice = ElevenLabs "Mark" (Henry-cloned) for consistency.
