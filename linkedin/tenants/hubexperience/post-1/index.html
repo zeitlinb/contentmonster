@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Fraunces"; src: url("fonts/Fraunces.ttf") format("truetype"); font-weight: 100 900; font-style: normal; }
+      @font-face { font-family: "Geist"; src: url("fonts/Geist-Regular.ttf") format("truetype"); font-weight: 400; }
+      @font-face { font-family: "Geist"; src: url("fonts/Geist-Medium.ttf") format("truetype"); font-weight: 500; }
+      @font-face { font-family: "Geist"; src: url("fonts/Geist-SemiBold.ttf") format("truetype"); font-weight: 600; }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1350px; overflow: hidden; background: #667263; }
+      body { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+
+      #root { position: absolute; inset: 0; background: #667263; }
+      /* png-sequence captures alpha and ignores the composition root's own background,
+         so paint the sage as a full-bleed CHILD layer (child divs ARE captured). */
+      .bg { position: absolute; inset: 0; background: #667263; z-index: 0; }
+
+      .frame { position: absolute; inset: 46px; border: 1.5px solid rgba(241,232,217,0.30); z-index: 1; }
+      .stage { z-index: 2; }
+
+      .stage {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 120px 96px; box-sizing: border-box; text-align: center;
+      }
+
+      .emblem {
+        width: 130px; height: 130px; border-radius: 50%;
+        border: 2px solid #F1E8D9; display: flex; align-items: center; justify-content: center;
+        margin-bottom: 36px;
+      }
+      .emblem span { font-family: "Fraunces"; font-weight: 600; font-variation-settings: "opsz" 40; font-size: 76px; line-height: 1; color: #F1E8D9; }
+
+      .eyebrow {
+        font-family: "Geist"; font-weight: 500; font-size: 25px;
+        letter-spacing: 0.26em; text-transform: uppercase; color: #F1E8D9; margin-bottom: 42px;
+      }
+
+      .hero {
+        font-family: "Fraunces"; font-weight: 600; font-variation-settings: "opsz" 144;
+        font-size: 128px; line-height: 1.0; letter-spacing: -0.015em; color: #F1E8D9; margin-bottom: 46px;
+      }
+      .hero .l { display: block; }
+
+      .essence {
+        font-family: "Geist"; font-weight: 400; font-size: 31px; line-height: 1.44;
+        color: #F1E8D9; max-width: 730px; margin-bottom: 40px;
+      }
+
+      .rule { width: 92px; height: 2px; background: #F1E8D9; opacity: 0.55; margin-bottom: 30px; }
+
+      .tag {
+        font-family: "Geist"; font-weight: 600; font-size: 25px;
+        letter-spacing: 0.22em; text-transform: uppercase; color: #F1E8D9; margin-bottom: 18px;
+      }
+      .url { font-family: "Geist"; font-weight: 500; font-size: 25px; letter-spacing: 0.02em; color: #F1E8D9; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="2" data-track-index="0" data-width="1080" data-height="1350">
+      <div class="bg"></div>
+      <div class="frame"></div>
+      <div class="stage">
+        <div class="emblem"><span>H</span></div>
+        <div class="eyebrow">The&nbsp;HUB&nbsp;Experience&nbsp;Company</div>
+        <div class="hero">
+          <span class="l">We are</span>
+          <span class="l">Memory</span>
+          <span class="l">Makers.</span>
+        </div>
+        <div class="essence">Eleven years making places people gather, stay, and remember. Now open for outside work.</div>
+        <div class="rule"></div>
+        <div class="tag">Operators, not decorators</div>
+        <div class="url">hubexperienceco.com</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        // Static poster: elements sit at their final CSS positions; an empty paused
+        // timeline satisfies the player contract so any captured frame is the final still.
+        const tl = gsap.timeline({ paused: true });
+        window.__timelines["main"] = tl;
+      </script>
+    </div>
+  </body>
+</html>
