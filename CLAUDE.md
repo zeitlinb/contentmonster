@@ -6,14 +6,15 @@
 
 ContentMonster is an **AI-native content engine** — one house running multiple content
 pipelines that share a common core (AI generation, media ops, QA, multi-tenant config).
-Two sibling pipelines: **ad-creative** (Meta static + video ads from a brand brief — the
-original 8-step engine) and **book-publishing** (books for Amazon/KDP — the newest realm).
+Sibling content pipelines: **ad-creative** (Meta static + video ads from a brand brief — the
+original 8-step engine). _The **book-publishing / Amazon-KDP** pipeline was **KILLED 2026-06-27**
+(not viable); direction moved to authority content as lead-gen — see the `docs/book-publishing/` banner._
 First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surface.
 
 ## Read these (canon)
 
 - **`docs/core-charter/contentmonster-charter.md`** — distilled source of truth: identity, settled decisions, open decisions (D1–D5). **Start here for *what* we're building.**
-- **`docs/book-publishing/`** — the **books category** (the active workstream). Read its `README.md` first: it hubs the KDP runbook, the automated-pipeline design, and all book research. Content pipelines are organized by category folder (books here; ad-creative/other content get sibling folders).
+- **`docs/book-publishing/`** — ⛔ **KILLED 2026-06-27** (Amazon/KDP not viable). Retained only as **research artifacts** — do not resume KDP work. Direction pivoted to authority content (lead-gen); see the folder's README banner.
 - **`docs/core-charter/brainstorm/`** — dated working docs where decisions get argued before promotion to the charter.
 - **`docs/engineering-standards.md`** — readiness board (build/test/CI/gates/flow), live status + the gaps the agent still owes.
 - **`docs/tools/gstack/use-gstack.md`** — *how we build here* (the methodology). **Read before writing code.**
@@ -67,6 +68,6 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 - **gstack:** global + namespaced (`/gstack-*`), trial mode (not team-pinned). `VERSION` 0.1.0.0 (== `package.json`).
 - **HyperFrames-first (2026-06-22):** default layout/video engine; skills installed (`.agents/skills` + `.claude/skills`), `hyperframes-lab/` smoke test renders green (Node 22 + FFmpeg 8). Standard = the 7-step pipeline (`docs/reference/hyperframes-pipeline.md`). Slash commands (`/hyperframes`, `/product-launch-video`, …) activate on next session reload.
 - **DB deferred** (file-based JSON + Zod; `packages/db` slot open). No app logic yet — `packages/core` modules are typed stubs.
-- **Books pipeline (D1) = the active workstream** — research + design phase (see `docs/book-publishing/`). Niche SET (Brad's domains); first title = AI Chief of Staff; KPI = hybrid (provisional); hand-craft #1 then automate; Mode A. Mid-`/last30days` demand sweep. The newest `docs/state/` file is the resume point.
+- **Books pipeline (D1) — KILLED 2026-06-27.** Selling books on Amazon/KDP is not viable; abandoned. `docs/book-publishing/` is retained only as research artifacts. Direction pivoted to **authority content** (lead-gen); scope tracked in memory (`[[project-authority-content-strategy]]`), kept out of canon.
 - **`/last30days` upgraded v2.1 → v3.8.0** this session (Reddit was dead; now fixed). Global skill at `~/Documents/Henry/skills/last30days/skills/last30days/`; needs Python 3.12+; ScrapeCreators key set. See `docs/tools/last30days/reference.md`.
 - **Then:** resume the ad pipeline (Drive sync → generate-scene; needs HyperFrames + provider SDKs — D3).

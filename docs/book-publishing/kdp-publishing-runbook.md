@@ -1,7 +1,7 @@
 ---
 title: KDP publishing runbook — zero → published book
 date: 2026-06-22
-status: draft v1 (research-backed; [VERIFY]-tagged items need a live re-check before Brad relies on them)
+status: "⛔ KILLED 2026-06-27 — Amazon/KDP not viable; abandoned. Retained as a research artifact only; NOT to execute. (was: draft v1, research-backed)"
 applies_to: ContentMonster book-publishing pipeline (charter D1); Brad's ~5-book authority series
 sources: research/2026-06-22-operator-playbook-and-economics.md (hub: README.md)
 relates_to: [[project-book-pipeline-strategy]]

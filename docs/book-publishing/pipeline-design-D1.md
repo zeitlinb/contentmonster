@@ -1,7 +1,7 @@
 ---
 title: Book-publishing pipeline design (charter D1) — captured design proposal
 date: 2026-06-22
-status: DEFERRED — this is the AUTOMATION phase (build AFTER book #1 ships, per the hand-craft-first decision). Captured durably; NOT settled. Two reconciliations applied (see top).
+status: "⛔ KDP KILLED 2026-06-27 — no book #1, no KDP automation. Retained as a research artifact; the manuscript-gen + prose-QA + PDF-typeset parts may be reused for authority content, but the KDP-upload / cover / pricing / ISBN parts are dead. (was: DEFERRED automation phase)"
 source: multi-agent design workflow (13 agents, ~1.6M tokens) — verified vs the claude-api skill + KDP docs
 relates_to: kdp-publishing-runbook.md; research/2026-06-22-operator-playbook-and-economics.md (hub: README.md); [[project-book-pipeline-strategy]]
 ---

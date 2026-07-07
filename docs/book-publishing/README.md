@@ -1,12 +1,21 @@
 # Book-publishing pipeline — category hub
 
+> # ⛔ KILLED — 2026-06-27 (Amazon/KDP)
+> **Selling books on Amazon/KDP is dead — not viable, abandoned 2026-06-27** (confirmed 2026-07-07). ContentMonster is **not** publishing books to KDP: there is no "book #1," no pricing, no runbook to execute, no strategy lock to ratify.
+>
+> The direction moved to **authority content** (lead magnets, articles/blog, an optional downloadable PDF) as a lead-gen funnel — scoped in memory (`[[project-authority-content-strategy]]`), deliberately **not** in canon.
+>
+> **Everything below is retained only as durable research artifacts** (demand sweeps, operator teardowns, economics) — useful reference, but the KDP plan itself is abandoned. **Do not resume KDP work from this folder.**
+
+---
+
 > **Entry point for ALL book-publishing work** (charter pipeline: books for Amazon/KDP).
 > ContentMonster runs multiple content pipelines; this folder is the **books** category.
 > Other content types (ad-creative, etc.) get their own sibling folders. Canon for *what
 > we're building* lives in the [charter](../core-charter/contentmonster-charter.md) (decision **D1**);
 > this hub is the books-specific deep-dive + index. Cross-session memory: `[[project-book-pipeline-strategy]]`.
 >
-> _Last updated: 2026-06-22._
+> _Last updated: 2026-06-22 · **category KILLED 2026-06-27** (see banner above)._
 
 ## Where we are
 Heavy **research + design phase, no book-pipeline code yet.** The niche is SET (Brad's own
