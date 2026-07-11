@@ -20,6 +20,10 @@ tenants/<id>/
                    agents/ (API control config), dist/ (printable guides)
   content/         produced content items (e.g. hubexperience/content/post-1/ —
                    the HEC first-post HyperFrames project)
+  assets/          RESERVED: Drive-synced client assets — gitignored for EVERY
+                   tenant (see docs/runbooks/google-drive-setup.md). Committed
+                   brand files go in brand/ (Phase 2) or channels/<ch>/assets/,
+                   never here.
 ```
 
 Phase 2 of the re-org plan adds the cross-channel spine per tenant: `tenant.md`

@@ -46,6 +46,10 @@ tmp/
 .omx/
 .vercel
 
-# contentmonster — generated output + synced client assets (never committed)
+# contentmonster — generated output + synced client assets (never committed).
+# tenants/<id>/assets/ is RESERVED for Drive-synced client assets (see
+# docs/runbooks/google-drive-setup.md) — always ignored, for every tenant.
+# Committed brand files belong in tenants/<id>/brand/ or the channel binding's
+# assets/ (tenants/<id>/channels/<ch>/assets/), which this pattern does NOT match.
 output/
-tenants/jaca/assets/
+tenants/*/assets/
