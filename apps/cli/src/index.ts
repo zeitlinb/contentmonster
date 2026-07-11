@@ -18,7 +18,7 @@ program
 
 program
   .command("download-assets")
-  .description("Sync a client's assets from Google Drive into clients/<id>/assets/")
+  .description("Sync a client's assets from Google Drive into tenants/<id>/assets/")
   .option("-c, --client <id>", "client tenant id", "jaca")
   .action((opts) => {
     console.log(`[download-assets] client=${opts.client} — not implemented yet`);

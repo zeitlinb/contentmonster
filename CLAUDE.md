@@ -4,18 +4,23 @@
 
 ## What this is
 
-ContentMonster is an **AI-native content engine** — one house running multiple content
-pipelines that share a common core (AI generation, media ops, QA, multi-tenant config).
-Sibling content pipelines: **ad-creative** (Meta static + video ads from a brand brief — the
-original 8-step engine). _The **book-publishing / Amazon-KDP** pipeline was **KILLED 2026-06-27**
-(not viable); direction moved to authority content as lead-gen — see the `docs/book-publishing/` banner._
-First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surface.
+ContentMonster is an **AI-native content engine** — one house producing content and
+operating distribution channels for every company in the empire, on two axes
+(ratified 2026-07-11): **`channels/<ch>/`** = reusable distribution engines
+(youtube · linkedin · meta-ads[dormant]) and **`tenants/<id>/`** = per-company state
+(constellation · hubexperience · jaca[archived]), sharing a common core (AI generation,
+media ops, QA, multi-tenant config). Sibling content pipelines: **channel ops** (the
+engines above) and **ad-creative** (Meta static + video ads from a brand brief — the
+original 8-step engine; deferred). _The **book-publishing / Amazon-KDP** pipeline was
+**KILLED 2026-06-27** (not viable); direction moved to authority content as lead-gen —
+see the `docs/book-publishing/` banner._ May later plug into GTM Machines as a CREATE surface.
 
 ## Read these (canon)
 
 - **`docs/core-charter/contentmonster-charter.md`** — distilled source of truth: identity, settled decisions, open decisions (D1–D5). **Start here for *what* we're building.**
 - **`docs/book-publishing/`** — ⛔ **KILLED 2026-06-27** (Amazon/KDP not viable). Retained only as **research artifacts** — do not resume KDP work. Direction pivoted to authority content (lead-gen); see the folder's README banner.
-- **`docs/core-charter/brainstorm/`** — dated working docs where decisions get argued before promotion to the charter.
+- **`docs/core-charter/brainstorm/`** — dated working docs where decisions get argued before promotion to the charter. _(`20260711-tenant-channel-matrix-scaffold.md` = the RATIFIED re-org roadmap, Phases 2–5 pending.)_
+- **`channels/README.md` + `tenants/README.md`** — the two-axis layout: engine anatomy, tenant anatomy, roster + live status.
 - **`docs/engineering-standards.md`** — readiness board (build/test/CI/gates/flow), live status + the gaps the agent still owes.
 - **`docs/tools/gstack/use-gstack.md`** — *how we build here* (the methodology). **Read before writing code.**
 - **`docs/reference/`** — engine specs preserved verbatim: `pipeline-spec`, `platform-rules`, `tech-decisions`, `lessons-learned` (read lessons-learned before any generation).
@@ -38,7 +43,8 @@ think→plan→build→review→test→ship loop under the hood.
 |---|---|
 | How we build the software (plan, review, test, ship, build-session state) | **gstack** (`/gstack-*`) |
 | What we're building + pipeline/brand/tenant knowledge + decisions | **the charter & doctrine** (`docs/core-charter/`) + memory |
-| The content engine's own logic (scene gen, compositing, QA, book pipeline) | **our code** (`packages/core`, `apps/cli`, `apps/web`) |
+| The content engine's own logic (scene gen, compositing, QA) | **our code** (`packages/core`, `apps/cli`, `apps/web`) |
+| Channel standup/ops knowledge + per-company instances | **`channels/<ch>/`** (engines) + **`tenants/<id>/`** (state) |
 
 Build-state → gstack; what-we-build → the charter/memory. Never create a competing knowledge store inside gstack.
 
@@ -62,8 +68,9 @@ Build-state → gstack; what-we-build → the charter/memory. Never create a com
 - Verified server/API/browser claims — not "it should work."
 - Private repos; secrets gitignored; confirm before anything public or a new external destination.
 
-## Current status (2026-06-22)
+## Current status (2026-07-11)
 
+- **Tenant × channel re-org RATIFIED + executed (2026-07-11):** `youtube/` + `linkedin/` → `channels/`; tenant instances extracted to `tenants/<id>/channels/<ch>/`; HEC post-1 → `tenants/hubexperience/content/post-1/`; `clients/jaca` → `tenants/jaca` (archived); `platform/meta.json` → `channels/meta-ads/` (dormant). Structure guard in CI (`tools/check-structure.sh`). Roadmap Phases 2–5 (tenant spine → content-item model → X/web engines → ops loop) in the 2026-07-11 brainstorm doc. Open forks: empire-doc routing, X greenlight, authority surface.
 - **Monorepo migration MERGED to main** (PR #1, 2026-06-22; Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`). CI + Vercel green; Vercel Root Directory = `apps/web`. Newest `docs/state/` file is the resume point.
 - **gstack:** global + namespaced (`/gstack-*`), trial mode (not team-pinned). `VERSION` 0.1.0.0 (== `package.json`).
 - **HyperFrames-first (2026-06-22):** default layout/video engine; skills installed (`.agents/skills` + `.claude/skills`), `hyperframes-lab/` smoke test renders green (Node 22 + FFmpeg 8). Standard = the 7-step pipeline (`docs/reference/hyperframes-pipeline.md`). Slash commands (`/hyperframes`, `/product-launch-video`, …) activate on next session reload.

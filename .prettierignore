@@ -9,8 +9,8 @@ coverage
 pnpm-lock.yaml
 
 # Hand-authored docs + tenant JSON — Prettier governs code, not our prose.
-# (Keeps the charter, brainstorm docs, client configs, and platform specs as written.)
+# (Keeps the charter, brainstorm docs, tenant configs, and channel specs as written.)
 *.md
 docs/
-clients/
-platform/
+tenants/
+channels/

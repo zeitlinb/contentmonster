@@ -48,4 +48,4 @@ tmp/
 
 # contentmonster — generated output + synced client assets (never committed)
 output/
-clients/*/assets/
+tenants/*/assets/

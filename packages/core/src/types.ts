@@ -24,13 +24,13 @@ export interface OutputFormat {
   ratio: string;
 }
 
-/** Universal platform spec (e.g. platform/meta.json). */
+/** Universal platform spec (e.g. channels/meta-ads/meta.json). */
 export interface PlatformSpec {
   name: string;
   formats: Record<string, OutputFormat>;
 }
 
-/** A tenant config bundle loaded from clients/<id>/*.json. */
+/** A tenant config bundle loaded from tenants/<id>/*.json. */
 export interface ClientConfig {
   name: string;
   [key: string]: unknown;

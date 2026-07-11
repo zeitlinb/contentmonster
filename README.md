@@ -1,19 +1,25 @@
 # ContentMonster
 
-AI-native **content engine** — one house running multiple content pipelines that
-share a common core (AI generation, media ops, QA, multi-tenant config).
+AI-native **content engine** — one house producing content and operating
+distribution channels for every company in the empire, on two axes:
+**channels** (reusable engines: the HOW of each platform) × **tenants**
+(per-company state: the WHO). Shared core: AI generation, media ops
+(HyperFrames-first), QA, multi-tenant config.
 
-- **Ad-creative pipeline** — Meta (Instagram/Facebook) ad creative, static + video, from a brand brief.
-- **Book-publishing pipeline** — books for Amazon (KDP). _(newest realm; design in progress)_
+- **Channel ops** — stand up + operate social presences per company: `channels/youtube/` (agent-API control live), `channels/linkedin/` (posting human-in-the-loop; API gated).
+- **Ad-creative pipeline** — Meta (Instagram/Facebook) ad creative, static + video, from a brand brief. _(deferred; engine stubbed, resumes with Drive-sync)_
+- ~~Book-publishing (Amazon/KDP)~~ — **killed 2026-06-27**; superseded by the authority-content direction.
 
 ## Layout (Turborepo + pnpm)
 
 ```
+channels/<ch>   reusable distribution ENGINES — playbook, templates, scripts
+                (youtube · linkedin · meta-ads[dormant seed])
+tenants/<id>    per-company state — channel bindings + content items
+                (constellation · hubexperience · jaca[archived])
 apps/web        Next.js dashboard
 apps/cli        commander CLI (pipeline commands, run via tsx)
 packages/core   @contentmonster/core — shared engine: ai · media · config · platform · qa · types
-clients/<id>    per-tenant config (Jaca Sugar is the test client)
-platform/       universal Meta/platform specs
 docs/           charter, engineering standards, references, runbooks, state
 ```
 

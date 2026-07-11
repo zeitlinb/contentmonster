@@ -65,7 +65,7 @@ flowchart TB
 | Layer | Owner repo | Owns | Status | Load-bearing constraint |
 |---|---|---|---|---|
 | **KNOW** — doctrine / knowledge / routing | `bzresearch` (→ `bzbrain` as the future extracted organ) | SEO/AEO/AI-visibility doctrine, audit-findings pipeline, source-of-truth, the ROUTER | 🟢 live | **Sole** doctrine store — no competing knowledge stores anywhere (ROUTER.md rule) |
-| **CREATE** — content + video production | `contentmonster` | Multi-tenant content/video factory (HyperFrames), ad-creative + authority-content pipelines, two-pass Vision QA | 🟡 building (HyperFrames usable now via skills; engine stubbed) | Companies register as tenants in `clients/<id>/`; universal rules in `platform/` |
+| **CREATE** — content + video production | `contentmonster` | Multi-tenant content/video factory (HyperFrames), ad-creative + authority-content pipelines, two-pass Vision QA | 🟡 building (HyperFrames usable now via skills; engine stubbed) | Companies register as tenants in `tenants/<id>/`; channel engines in `channels/` |
 | **DISTRIBUTE** — outbound + channels | `gtmmachines` | Demand-gen, channel selection/sequencing, campaign orchestration, **+ channel standup/operation** (proposed) | 🟡 building (console live; public engine + channel-ops unbuilt) | Cross-engine asset orders shouldn't bypass Brad-mediated seams (§6) |
 | **CAPTURE** — inbound / search | `constellation` (app + bzresearch doctrine) | Get-found / stay-found / search-to-sale; Readiness Reports + Punch Lists to clients | 🟢 live (runconstellation.com) | Brad mediates **all** Sherlock ↔ dev-team (Archie/Fred/Felix/Henry) comms |
 | **CONVERT** — sales / revenue close | per-company CRM | Turning captured demand into closed revenue | ⚪ early | GTM's Relationship-OS console is the nearest shared surface |
@@ -76,11 +76,11 @@ flowchart TB
 | When the job is… | Talk to (owner) |
 |---|---|
 | Write/evolve SEO·AEO·AI-visibility doctrine or any reusable playbook | **bzresearch** (KNOW) via Sherlock — never a competing store |
-| Produce a video, ad creative, or authority/lead-magnet asset for a company | **ContentMonster** (CREATE) — register the company as a `clients/<id>/` tenant, run the pipeline |
+| Produce a video, ad creative, or authority/lead-magnet asset for a company | **ContentMonster** (CREATE) — register the company as a `tenants/<id>/` tenant, run the pipeline |
 | Set up / run a social channel (YouTube, X, LinkedIn) for a company | **GTM Machines** (DISTRIBUTE) — orders renders from ContentMonster, pulls brand from the tenant, logs strategy in bzresearch |
 | Generate outbound demand / run a campaign / pick channels | **GTM Machines** (DISTRIBUTE) → hands qualified demand to CAPTURE |
 | Run an SEO / AI-visibility audit + deliver to a paying client | **Constellation** (CAPTURE) — dev team; doctrine flows from bzresearch via Brad-mediated briefs |
-| Register a new company as a content tenant / set its brand rules | **ContentMonster** — add `clients/<id>/`; destination rules in `platform/` |
+| Register a new company as a content tenant / set its brand rules | **ContentMonster** — add `tenants/<id>/`; destination rules in `channels/` |
 | Stand up a new company / marketing site / repo properly | **Substrate** — `bz-setup` + gstack, reusing the unfairmachines foundation |
 | Track build-process state (plan/review/test/ship/handoff) | **gstack** (`/gstack-*`) in that repo |
 | Capture a cross-company learning so it compounds | **bzresearch** audit-findings → doctrine (destined for bzbrain) |

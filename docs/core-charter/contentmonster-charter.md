@@ -15,15 +15,19 @@ config). It may later plug into [GTM Machines](https://gtmmachines.com) as a CRE
 
 Content pipelines:
 
+- **Channel ops** — stand up + operate social presences for any company in the
+  empire: engines in `channels/<ch>/` (YouTube live w/ agent-API control; LinkedIn
+  live, posting human-in-the-loop), per-company instances in `tenants/<id>/channels/<ch>/`.
 - **Ad-creative pipeline** — generates Meta (Instagram/Facebook) ad creative (static
   + video) from a brand brief. The original engine; an 8-step pipeline with two-pass
-  QA. Full spec: [`../reference/pipeline-spec.md`](../reference/pipeline-spec.md).
+  QA. Full spec: [`../reference/pipeline-spec.md`](../reference/pipeline-spec.md). _(Deferred; resumes with Drive-sync.)_
 - ~~**Book-publishing pipeline** — books to sell on Amazon (KDP).~~ **KILLED 2026-06-27**
   (not viable; abandoned). Superseded by an **authority-content** lead-gen direction —
   scoped in memory (`[[project-authority-content-strategy]]`), kept out of canon. See §3 D1.
 
-First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
-`clients/jaca/`; brand spec at [`../../clients/jaca/brand-spec.md`](../../clients/jaca/brand-spec.md).
+Companies plug in as **tenants** under `tenants/<id>/` — Constellation and
+HubExperience active; **Jaca Sugar** (the original ad-creative test tenant, allulose
+sweetener) archived at [`../../tenants/jaca/`](../../tenants/jaca/).
 
 ## 2. Settled Decisions
 
@@ -33,12 +37,13 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 | 2026-02 | **Sharp = pixel ops** (bg removal, color grade, shadows, resize). **HyperFrames = ALL layout** (text, logo, pills, CTA, safe zones) — default since 2026-06-22; Remotion kept as alt/reference. Never mix pixel-ops with layout. |
 | 2026-02 | **AI scene gen = Nano Banana 2 (Gemini 3.1 Flash Image)**; Grok as alt. **NEVER rely on AI-rendered text** — HyperFrames owns typography (Remotion alt). |
 | 2026-02 | **Two-pass QA after every step:** Pass 1 Gemini Vision (objective spec), Pass 2 Claude Vision (subjective 8-dim rubric, ≥7.0 to pass). |
-| 2026-02 | **Multi-tenant by config:** client rules → `clients/<id>/`; universal platform rules → `platform/`. No client logic hardcoded in system code. |
+| 2026-02 | **Multi-tenant by config:** client rules → `clients/<id>/`; universal platform rules → `platform/`. No client logic hardcoded in system code. _(Paths since 2026-07-11: `tenants/<id>/` + `channels/`.)_ |
 | 2026-06-21 | **One content house, multiple pipelines** (ads + books are siblings sharing `packages/core`). |
 | 2026-06-21 | **Turborepo + pnpm monorepo**, modeled on gtmmachines: `apps/web` + `apps/cli` + `packages/core`. gstack as build harness (trial/global). |
 | 2026-06-21 | **Database deferred** — stay file-based (JSON tenant configs + Zod); `packages/db` slot left open. |
 | 2026-06-22 | **HyperFrames-first shop** — HyperFrames is the **default layout/video engine** (HTML compositions, deterministic Chrome-capture → FFmpeg render); installed via agent skills + `npx hyperframes` CLI. Remotion kept as an available alt/reference. |
 | 2026-06-22 | **Video production standard = the HyperFrames 7-step pipeline** (Capture → Design → Script → Storyboard → VO&Timing → Build → Validate). Spec: [`../reference/hyperframes-pipeline.md`](../reference/hyperframes-pipeline.md). |
+| 2026-07-11 | **Tenant × channel matrix:** `channels/<ch>/` = reusable distribution engines (the HOW, channel-first); `tenants/<id>/` = per-company state (the WHO, tenant-first). Social channel-ops lives in ContentMonster (the empire doc's "may migrate to DISTRIBUTE" hedge stays PROPOSED). Ratified from [`brainstorm/20260711-tenant-channel-matrix-scaffold.md`](brainstorm/20260711-tenant-channel-matrix-scaffold.md); Phases 2–5 there are the roadmap. |
 
 ## 3. Open Decisions
 
@@ -60,12 +65,19 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 
 ## 5. Context Snapshot
 
-Monorepo migration shipped to branch `migrate/monorepo-turborepo-pnpm` on 2026-06-21
-(see latest `docs/state/`). No app logic implemented yet — `packages/core` modules are
-typed stubs. The book pipeline (D1) is **killed** (2026-06-27); the remaining deferred build is
-the ad pipeline's Drive-sync + `generate-scene` CLIs (see [`../runbooks/google-drive-setup.md`](../runbooks/google-drive-setup.md)).
+Monorepo migration merged to main 2026-06-22 (PR #1). Repo re-organized into the
+tenant × channel matrix 2026-07-11 (`channels/` + `tenants/`). No app logic
+implemented yet — `packages/core` modules are typed stubs; the working machinery is
+the channel engines (`channels/youtube` incl. operate scripts, `channels/linkedin`)
++ HyperFrames. The book pipeline (D1) is **killed** (2026-06-27); the remaining
+deferred build is the ad pipeline's Drive-sync + `generate-scene` CLIs (see
+[`../runbooks/google-drive-setup.md`](../runbooks/google-drive-setup.md)).
 
 ## Changelog
+- 2026-07-11 — **Ratified the tenant × channel matrix** (Brad: "greenlight"): repo
+  re-organized into `channels/` (engines) + `tenants/` (per-company state);
+  `clients/jaca` → `tenants/jaca` (archived), `platform/meta.json` →
+  `channels/meta-ads/` (dormant seed). Roadmap in the 2026-07-11 brainstorm doc.
 - 2026-07-07 — **Killed the book-publishing (Amazon/KDP) pipeline (D1)** — not viable,
   abandoned 2026-06-27. Research retained as artifacts; direction moved to authority
   content (lead-gen), tracked in memory, not canon.

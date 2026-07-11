@@ -1,7 +1,7 @@
 # Runbook — Google Drive asset sync (Jaca)
 
 > Operational setup for syncing a client's brand/product/UGC assets from Google Drive
-> into `clients/<id>/assets/` (gitignored). Promoted from the 2026-02-27 pre-monorepo
+> into `tenants/<id>/assets/` (gitignored). Promoted from the 2026-02-27 pre-monorepo
 > state file. Drives the `apps/cli` `download-assets` command (not yet implemented).
 
 ## One-time setup (Brad, browser steps)
@@ -18,8 +18,8 @@
 5. Drop the JSON key at `credentials/drive-service-account.json` (gitignored).
 
 ## Then (agent builds)
-- `apps/cli` `download-assets` command → syncs Drive folders into `clients/jaca/assets/` using the `googleapis` client in `packages/core`.
+- `apps/cli` `download-assets` command → syncs Drive folders into `tenants/jaca/assets/` using the `googleapis` client in `packages/core`.
 
 ## Notes
-- `credentials/` and `clients/*/assets/` are gitignored — never commit keys or synced assets.
+- `credentials/` and `tenants/*/assets/` are gitignored — never commit keys or synced assets.
 - Source brief paths in the old state file are **Windows paths from a different machine** (historical); this repo is on macOS.
