@@ -1,6 +1,6 @@
 # Constellation channel — image assets
 
-> What to produce, the exact specs, and the source files. Produce these (CREATE / HyperFrames or image tooling) and drop the outputs in this folder. Specs are mirrored from [`../../../../channels/youtube/playbook/04-branding-assets.md`](../../../../channels/youtube/playbook/04-branding-assets.md) — re-confirm at upload (YouTube shows live validation).
+> What to produce, the exact specs, and the source files. Produce these (CREATE / HyperFrames or image tooling) and drop the outputs in this folder. Specs are mirrored from [`../../../../../channels/youtube/playbook/04-branding-assets.md`](../../../../../channels/youtube/playbook/04-branding-assets.md) — re-confirm at upload (YouTube shows live validation).
 
 ## Source brand files (from bzresearch)
 - `…/bzresearch/marketing/brand/logo/constellation-logo-white.png`

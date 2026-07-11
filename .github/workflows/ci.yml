@@ -26,14 +26,6 @@ permissions:
   contents: read
 
 jobs:
-  structure:
-    name: Channel/tenant structure
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - run: bash tools/check-structure.sh
-
   build-and-test:
     name: Build & unit tests
     runs-on: ubuntu-latest

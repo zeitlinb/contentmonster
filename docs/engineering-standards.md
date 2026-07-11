@@ -22,7 +22,7 @@
 
 ## CI / automation
 - ✅ `.github/workflows/ci.yml` — app job (install --frozen-lockfile, check-types, build, test); green since PR #1 (2026-06-22).
-- ✅ `structure` job — `tools/check-structure.sh` guards the tenant×channel layout (engines in `channels/`, companies in `tenants/`, playbook anatomy, no credential JSON outside `credentials/`). Added 2026-07-11.
+- ✅ `.github/workflows/structure.yml` — `tools/check-structure.sh` guards the tenant×channel layout (engines in `channels/`, companies in `tenants/`, playbook anatomy, per-binding config sheets, no credential-shaped content outside `credentials/`). Its own workflow ON PURPOSE: ci.yml paths-ignores `**.md` on main pushes, and this guard polices markdown. Added 2026-07-11.
 - 🅿️ DB job (pgTAP) — deferred until a database exists (charter D4).
 
 ## Source control & flow

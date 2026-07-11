@@ -1,0 +1,23 @@
+# Tenant × channel structure guard — its own workflow ON PURPOSE: ci.yml
+# paths-ignores docs/** and **.md on pushes to main, but this guard polices
+# almost exclusively markdown (playbooks, templates, tenant configs), and
+# state/doc commits go straight to main by standing protocol. No path filter
+# here so the guard runs on every push and PR; the job costs seconds.
+name: Structure
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  structure:
+    name: Channel/tenant structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash tools/check-structure.sh

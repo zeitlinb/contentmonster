@@ -14,7 +14,7 @@ Prereqs:
     pip install google-auth-oauthlib google-api-python-client
 
 Usage (from repo root):
-    python youtube/scripts/mint-youtube-token.py \
+    python channels/youtube/scripts/mint-youtube-token.py \
         --client-secret credentials/youtube/constellation/client_secret.json \
         --token-out      credentials/youtube/constellation/token.json \
         --scopes youtube.upload,youtube

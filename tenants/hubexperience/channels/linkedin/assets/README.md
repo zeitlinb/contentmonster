@@ -1,6 +1,6 @@
 # HEC LinkedIn — image assets
 
-> What to produce, the exact specs, and the source files. Produced by CREATE (render scripts here / HyperFrames). Specs mirror [`../../../../channels/linkedin/playbook/04-branding-assets.md`](../../../../channels/linkedin/playbook/04-branding-assets.md) — re-confirm at upload (LinkedIn shows live validation). **All images are brand assets (not secrets) and may be committed.**
+> What to produce, the exact specs, and the source files. Produced by CREATE (render scripts here / HyperFrames). Specs mirror [`../../../../../channels/linkedin/playbook/04-branding-assets.md`](../../../../../channels/linkedin/playbook/04-branding-assets.md) — re-confirm at upload (LinkedIn shows live validation). **All images are brand assets (not secrets) and may be committed.**
 
 ## Brand source (from the hubexperience repo canon)
 - Palette + type: `hubexperience/core/brand/visual-identity.md` (cream `#F1E8D9`, ink `#1A1208`, rust `#B45D2A` / CTA `#A85327`, muted `#5A5040`, hairline `#C9BFB4`; Fraunces + Geist).

@@ -144,7 +144,7 @@ Goal: agents upload videos and manage the channel via the **YouTube Data API v3*
 8. **Mint the refresh token (one time)** — use the bundled helper, no hand-rolled OAuth needed:
    ```bash
    pip install google-auth-oauthlib google-api-python-client
-   python youtube/scripts/mint-youtube-token.py \
+   python channels/youtube/scripts/mint-youtube-token.py \
      --client-secret credentials/youtube/constellation/client_secret.json \
      --token-out      credentials/youtube/constellation/token.json \
      --scopes youtube.upload,youtube
@@ -153,12 +153,12 @@ Goal: agents upload videos and manage the channel via the **YouTube Data API v3*
 9. **Smoke test:** the helper automatically calls `channels.list mine=true` and prints the channel it's bound to — confirm it says **Constellation**. Wrong/personal channel → re-run and pick the Brand Account at the chooser.
 10. **Quota:** default **10,000 units/day** combined pool **for endpoints _other than_ `videos.insert` and `search.list`** (reads = 1 unit, writes = 50, captions = 400+), resets midnight Pacific. `videos.insert` now costs **1 unit in its own "Video Uploads" bucket, default 100 uploads/day** — so the upload limiter is the **100/day cap**, not the 10k pool. _History (per the [official revision history](https://developers.google.com/youtube/v3/revision_history)): the old ~1,600-unit upload cost dropped to ~100 units on **4 Dec 2025** (still in the main pool), then `videos.insert` + `search.list` moved to their **own granular buckets at 1 unit each on 1 Jun 2026** — so the current 1-unit/own-bucket model is the **June-2026** change, not December 2025._ More quota = submit the *YouTube API Services – Audit and Quota Extension* form (no self-serve bump). Confirm live numbers under **APIs & Services → Quotas**.
 
-11. **Operate the channel (the consumer of the token).** Minting is done; agents now run the channel via `youtube/scripts/operate-youtube.py`, which loads `token.json` and auto-refreshes:
+11. **Operate the channel (the consumer of the token).** Minting is done; agents now run the channel via `channels/youtube/scripts/operate-youtube.py`, which loads `token.json` and auto-refreshes:
     ```bash
     # standing smoke test — re-confirm the token is bound to Constellation anytime:
-    python youtube/scripts/operate-youtube.py verify --token credentials/youtube/constellation/token.json
+    python channels/youtube/scripts/operate-youtube.py verify --token credentials/youtube/constellation/token.json
     # upload (private by default; --publish-at schedules; --thumbnail sets a custom thumb):
-    python youtube/scripts/operate-youtube.py upload --token credentials/youtube/constellation/token.json \
+    python channels/youtube/scripts/operate-youtube.py upload --token credentials/youtube/constellation/token.json \
       --file video.mp4 --title "…" --description "…" --tags "ai,seo" --category 28 --privacy private
     ```
     Subcommands: `verify`, `upload`, `thumbnail`, `update`. Captions/comments are intentionally omitted (they need `force-ssl` — expand scopes first).
@@ -167,7 +167,7 @@ Goal: agents upload videos and manage the channel via the **YouTube Data API v3*
 **Agents can:** upload + full metadata, thumbnails, playlists/sections, captions, channel keywords/description/links/country/banner/watermark, comments.
 **Agents can't (UI-only):** profile picture/avatar, Community posts, end screens, monetization, phone verification.
 
-> **Security tradeoff (read this):** the Internal-app refresh token is, by design, a **long-lived, durable credential** (durable, _not literally non-expiring_) that can upload to and manage the channel as henry@ with no further human approval. _It can still be invalidated by: the user revoking access, ~6 months of non-use, an admin restricting a requested scope, exceeding the per-client live-token limit, or a Workspace **Google Cloud session-control** policy (Admin console → Security) — which is the one remaining way an Internal-app token can be forced to re-consent._ Compensating controls: (a) keep it **only** under gitignored `credentials/youtube/constellation/`, never in the `youtube/` tree or any commit; (b) it can be revoked instantly at **myaccount.google.com/permissions** or by deleting the OAuth client in Cloud Console if it leaks; (c) access-control the host/disk that stores it and **re-mint periodically**; (d) request only the scopes you need (don't add `force-ssl` unless agents manage captions/comments).
+> **Security tradeoff (read this):** the Internal-app refresh token is, by design, a **long-lived, durable credential** (durable, _not literally non-expiring_) that can upload to and manage the channel as henry@ with no further human approval. _It can still be invalidated by: the user revoking access, ~6 months of non-use, an admin restricting a requested scope, exceeding the per-client live-token limit, or a Workspace **Google Cloud session-control** policy (Admin console → Security) — which is the one remaining way an Internal-app token can be forced to re-consent._ Compensating controls: (a) keep it **only** under gitignored `credentials/youtube/constellation/`, never in the committed repo tree (`channels/`, `tenants/`) or any commit; (b) it can be revoked instantly at **myaccount.google.com/permissions** or by deleting the OAuth client in Cloud Console if it leaks; (c) access-control the host/disk that stores it and **re-mint periodically**; (d) request only the scopes you need (don't add `force-ssl` unless agents manage captions/comments).
 
 ---
 

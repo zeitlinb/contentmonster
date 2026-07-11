@@ -1,6 +1,6 @@
 # HEC LinkedIn — agent / API control
 
-> How (and whether) agents operate this Page programmatically. Full rationale + limits in [`../../../../channels/linkedin/playbook/02-agent-control-api.md`](../../../../channels/linkedin/playbook/02-agent-control-api.md). **No secrets are committed.** Read this before promising anyone "the agent runs the page."
+> How (and whether) agents operate this Page programmatically. Full rationale + limits in [`../../../../../channels/linkedin/playbook/02-agent-control-api.md`](../../../../../channels/linkedin/playbook/02-agent-control-api.md). **No secrets are committed.** Read this before promising anyone "the agent runs the page."
 
 ## The honest status (2026-07-06)
 - **Posting model right now: human-in-the-loop.** Agents (Dewey / CREATE) draft copy + produce assets; a Page **Super/Content admin** (Tully) publishes. This is the launch model — it needs **no** LinkedIn approval and can go live today.
@@ -23,7 +23,7 @@ credentials/linkedin/hubexperience/
   client_secret.json     # from the LinkedIn developer app
   token.json             # access + refresh tokens
 ```
-Never place these in the `linkedin/` tree (it's committed). Only under `credentials/`.
+Never place these inside the committed repo tree (`channels/`, `tenants/`). Only under `credentials/`.
 
 ## Interim (before an API grant): reputable scheduler — optional
 If Tully wants queued/scheduled posting before the API is granted, use a reputable scheduler (Buffer / Hootsuite / Sprout) that rides its **own** approved LinkedIn access. Agents prepare the copy + assets; the scheduler posts on Tully's approval. **Avoid** scraping / auto-connect / auto-DM tools — they get pages and profiles restricted.

@@ -66,7 +66,7 @@ _(LIVE on the channel as of 2026-06-29.)_
 - **OAuth client:** **Desktop app** "Constellation YouTube agent (desktop)" · loopback redirect · client id `423893530283-…apps.googleusercontent.com`.
 - **Scopes:** `youtube.upload` + `youtube` (least-privilege; `youtube.force-ssl` **not** added — only needed if agents manage captions/comments).
 - **Refresh token:** minted 2026-07-01 → `credentials/youtube/constellation/token.json` (0600, gitignored). Bound to **Constellation AI** (`UChonz99tpyIYgvMnUfTTAvA`) — verified via `channels.list mine=true` + `operate-youtube.py verify` (real API call).
-- **Operate the channel:** `python youtube/scripts/operate-youtube.py {verify,upload,thumbnail,update} --token credentials/youtube/constellation/token.json` (loads token.json, auto-refresh). Re-mint with `mint-youtube-token.py` if ever needed.
+- **Operate the channel:** `python channels/youtube/scripts/operate-youtube.py {verify,upload,thumbnail,update} --token credentials/youtube/constellation/token.json` (loads token.json, auto-refresh). Re-mint with `mint-youtube-token.py` if ever needed.
 - **Durability check (OPEN):** re-run `operate-youtube.py verify` on/after **2026-07-09** (day 8+) to empirically confirm the Internal token did **not** hit a 7-day expiry.
 - **Revoke/rotate:** revoke at `myaccount.google.com/permissions` or delete the OAuth client in Cloud Console; then re-mint. Re-minting issues a fresh token; revoke the prior grant to avoid orphaned credentials.
 - **Secrets (gitignored):** `credentials/youtube/constellation/` — `client_secret.json`, `token.json`. Never commit.

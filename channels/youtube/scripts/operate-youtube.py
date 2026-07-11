@@ -16,11 +16,11 @@ Prereqs:
 
 Usage (from repo root):
     # Standing smoke test — confirm the token is still bound to the right channel:
-    python youtube/scripts/operate-youtube.py verify \
+    python channels/youtube/scripts/operate-youtube.py verify \
         --token credentials/youtube/constellation/token.json
 
     # Upload a video (private by default — flip to public/unlisted, or schedule):
-    python youtube/scripts/operate-youtube.py upload \
+    python channels/youtube/scripts/operate-youtube.py upload \
         --token credentials/youtube/constellation/token.json \
         --file path/to/video.mp4 \
         --title "Title" --description "Body" --tags "ai,seo,geo" \
@@ -28,12 +28,12 @@ Usage (from repo root):
         [--thumbnail path/to/thumb.jpg] [--publish-at 2026-07-04T15:00:00Z] [--made-for-kids]
 
     # Set/replace a thumbnail on an existing video:
-    python youtube/scripts/operate-youtube.py thumbnail \
+    python channels/youtube/scripts/operate-youtube.py thumbnail \
         --token credentials/youtube/constellation/token.json \
         --video-id VIDEO_ID --file path/to/thumb.jpg
 
     # Update metadata on an existing video (only the flags you pass change):
-    python youtube/scripts/operate-youtube.py update \
+    python channels/youtube/scripts/operate-youtube.py update \
         --token credentials/youtube/constellation/token.json \
         --video-id VIDEO_ID [--title ...] [--description ...] [--tags ...] [--privacy ...]
 
@@ -64,7 +64,7 @@ def _load_creds(token_path):
 
     if not os.path.exists(token_path):
         print(f"Token not found: {token_path}\n"
-              f"Mint it first with youtube/scripts/mint-youtube-token.py (Phase 7).", file=sys.stderr)
+              f"Mint it first with channels/youtube/scripts/mint-youtube-token.py (Phase 7).", file=sys.stderr)
         raise SystemExit(1)
 
     creds = Credentials.from_authorized_user_file(token_path)

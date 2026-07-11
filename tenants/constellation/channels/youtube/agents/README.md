@@ -1,6 +1,6 @@
 # Constellation channel — agent / API control
 
-> How agents operate this channel programmatically. Full rationale + limits in [`../../../../channels/youtube/playbook/02-agent-control-api.md`](../../../../channels/youtube/playbook/02-agent-control-api.md). This file is the Constellation-specific config. **No secrets are committed.**
+> How agents operate this channel programmatically. Full rationale + limits in [`../../../../../channels/youtube/playbook/02-agent-control-api.md`](../../../../../channels/youtube/playbook/02-agent-control-api.md). This file is the Constellation-specific config. **No secrets are committed.**
 
 ## Model (recap)
 - **No service accounts** — they can't run a normal channel (`NoLinkedYouTubeAccount`). Agents use an **OAuth refresh token** for a Google account that manages the channel.
@@ -24,7 +24,7 @@ credentials/youtube/constellation/
   client_secret.json     # downloaded from the OAuth client (Cloud console)
   token.json             # the minted refresh token (+ access token cache)
 ```
-Never place these inside the `youtube/` tree (it's committed). Only under `credentials/`.
+Never place these inside the committed repo tree (`channels/`, `tenants/`). Only under `credentials/`.
 
 ## One-time setup → see the setup guide
 Phase 7 of [`../setup-guide.md`](../setup-guide.md) is the click-by-click: create project → enable API → Internal consent → Desktop client → mint refresh token → store under `credentials/youtube/constellation/`.
@@ -32,7 +32,7 @@ Phase 7 of [`../setup-guide.md`](../setup-guide.md) is the click-by-click: creat
 Mint the token with the bundled helper (handles the loopback OAuth + smoke test):
 ```bash
 pip install google-auth-oauthlib google-api-python-client
-python youtube/scripts/mint-youtube-token.py \
+python channels/youtube/scripts/mint-youtube-token.py \
   --client-secret credentials/youtube/constellation/client_secret.json \
   --token-out      credentials/youtube/constellation/token.json \
   --scopes youtube.upload,youtube
@@ -46,9 +46,9 @@ python youtube/scripts/mint-youtube-token.py \
 The consumer of the token. Loads `token.json`, auto-refreshes, and runs the channel:
 ```bash
 # standing smoke test (repeatable — re-run anytime to confirm the token binding):
-python youtube/scripts/operate-youtube.py verify --token credentials/youtube/constellation/token.json
+python channels/youtube/scripts/operate-youtube.py verify --token credentials/youtube/constellation/token.json
 # upload a video (private by default):
-python youtube/scripts/operate-youtube.py upload --token credentials/youtube/constellation/token.json \
+python channels/youtube/scripts/operate-youtube.py upload --token credentials/youtube/constellation/token.json \
   --file video.mp4 --title "…" --description "…" --tags "ai,seo" --category 28 --privacy private
 ```
 Subcommands: `verify` · `upload` (+ `--thumbnail`, `--publish-at`, `--made-for-kids`) · `thumbnail` · `update`.

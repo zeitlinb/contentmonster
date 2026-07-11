@@ -38,8 +38,9 @@ Note: FFmpeg drawtext filter may not be available — use ASS subtitles.
 ## Config: JSON + Zod
 Tenant configs as JSON files in clients/{name}/. Validated with Zod schemas at load time.
 Platform specs as JSON in platform/. Universal, not tenant-specific.
+_[Editorial note 2026-07-11: paths are now `tenants/{name}/` and `channels/` (e.g. `channels/meta-ads/meta.json`) after the tenant×channel re-org — see the charter's 2026-07-11 settled decision. Decision substance unchanged.]_
 
 ## Multi-Tenant Architecture
-- Client-specific rules (colors, fonts, no dark backgrounds) = tenant config in clients/{name}/
-- Platform rules (Meta safe zones, aspect ratios, caption requirements) = universal in platform/
+- Client-specific rules (colors, fonts, no dark backgrounds) = tenant config in clients/{name}/ _(now `tenants/{name}/`, 2026-07-11)_
+- Platform rules (Meta safe zones, aspect ratios, caption requirements) = universal in platform/ _(now `channels/`, 2026-07-11)_
 - NO client-specific logic hardcoded in system code

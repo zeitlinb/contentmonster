@@ -77,7 +77,7 @@ Paste from `linkedin-config.md` (get **[CONFIRM]** sign-off first). **Save** eac
 
 ## Phase 5 — Posting model / agent control (read the honest version)
 - **Now:** human-in-the-loop — agents draft copy + assets; Tully (Super/Content admin) publishes. Live today, no LinkedIn approval needed.
-- **Programmatic Page posting is gated:** the **Community Management API** requires a developer app associated with the page, a Super-admin **app verification**, and LinkedIn's **review of an application**. No YouTube-style Internal-app shortcut. Pursue in parallel; don't block launch. Full detail: [`agents/README.md`](agents/README.md) + [`../../../channels/linkedin/playbook/02-agent-control-api.md`](../../../channels/linkedin/playbook/02-agent-control-api.md).
+- **Programmatic Page posting is gated:** the **Community Management API** requires a developer app associated with the page, a Super-admin **app verification**, and LinkedIn's **review of an application**. No YouTube-style Internal-app shortcut. Pursue in parallel; don't block launch. Full detail: [`agents/README.md`](agents/README.md) + [`../../../../channels/linkedin/playbook/02-agent-control-api.md`](../../../../channels/linkedin/playbook/02-agent-control-api.md).
 
 ---
 
