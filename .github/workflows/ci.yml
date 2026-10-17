@@ -1,50 +1,29 @@
-# ContentMonster CI — one app job: typecheck, build, unit tests.
-# No database job yet (DB deferred — see the charter, decision D4).
-name: CI
+# bz:config — written by `bz-config apply` from @bz/config (harness). Edit the template there, not here.
+# No workflow runs on GitHub automatically (orders E5–E8 in AGENTS.md). Verification runs on this
+# Mac at the code-ready head (pstack). This is ONE job, `pnpm verify`, for a deliberate manual run
+# only: workflow_dispatch, no push / pull_request / schedule trigger.
+name: ci
 
 on:
-  pull_request:
-  push:
-    branches: [main]
-    # Docs/state handoffs go straight to main by standing protocol — don't burn
-    # a CI run on them. PRs are never filtered.
-    paths-ignore:
-      - "docs/**"
-      - "**.md"
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
-  # Cancel superseded runs on PRs only; every main commit keeps a completed run.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
-# Opt JS actions onto Node 24 ahead of GitHub's forced cutover, so CI proves they
-# run clean before we're forced over.
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: Build & unit tests
+  backstop:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-
-      # Reads the pnpm version from "packageManager" in package.json.
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
-
-      - run: pnpm check-types
-
-      - run: pnpm build
-
-      - run: pnpm test
+      - run: pnpm lint && pnpm check-types && pnpm build

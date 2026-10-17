@@ -1,0 +1,21 @@
+# bz:config — written by `bz-config apply` from @bz/config (harness). Edit the template there, not here.
+# Order E8: weekly, grouped, at most 3 open PRs. ci.yml has no pull_request trigger, so a
+# Dependabot PR never spends CI minutes; it is verified locally like any other unit.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      npm:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns: ["*"]

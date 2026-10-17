@@ -48,11 +48,11 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 | D2 | **Video/layout engine** — adopted **HyperFrames** as the default (2026-06-22); standard = the 7-step pipeline; Remotion kept as alt/reference. | DECIDED | [`../reference/hyperframes-pipeline.md`](../reference/hyperframes-pipeline.md) |
 | D3 | **Headless QA auth** — Pass 2 is "we are Claude" interactively; needs `ANTHROPIC_API_KEY` when run headless/CI. | DECIDED in design (require key, fail-loud on refusal). _The book pipeline it referenced is **killed** (D1); the auth decision still applies to any future prose/QA pipeline._ | [`../book-publishing/pipeline-design-D1.md`](../book-publishing/pipeline-design-D1.md) |
 | D4 | **Database** — when to stand up Supabase and what it persists (asset tracking, book metadata, sales). | DEFERRED | — |
-| D5 | **gstack mode** — trial/global now; revisit team-mode if collaborators join. | TRIAL | [`../tools/gstack/use-gstack.md`](../tools/gstack/use-gstack.md) |
+| D5 | **Build method** — pstack (open-pstack poteto-mode) governs (Brad 2026-10-16, superseding the gstack trial). | LOCKED | — |
 
 ## 4. Operating Principles
 
-- **gstack is HOW we build, not WHAT we build** — see [`../tools/gstack/use-gstack.md`](../tools/gstack/use-gstack.md).
+- **pstack is HOW we build, not WHAT we build.**
 - **Lanes:** build-process → gstack; what-we-build (pipelines, brand/tenant knowledge, decisions) → this charter + `docs/`; engine logic → `packages/core` + `apps/cli`.
 - **Read the spec before every generation** — from the file, not memory (see [`../reference/lessons-learned.md`](../reference/lessons-learned.md); dimension-check output FIRST).
 - **Vision QA runs after every step, before any human sees output.**
