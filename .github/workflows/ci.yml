@@ -1,7 +1,6 @@
-# bz:config — written by `bz-config apply` from @bz/config (harness). Edit the template there, not here.
-# No workflow runs on GitHub automatically (orders E5–E8 in AGENTS.md). Verification runs on this
-# Mac at the code-ready head (pstack). This is ONE job, the repo's verify command, for a deliberate
-# manual run only: workflow_dispatch, no push / pull_request / schedule trigger.
+# This repo owns this file (first copied from zeitlinb/harness templates/ci.yml).
+# GitHub runs nothing automatically (rules E5–E7 in AGENTS.md). This is one job, the repo's verify
+# command, for a deliberate manual run only: workflow_dispatch, no push, pull_request or schedule.
 name: ci
 
 on:
