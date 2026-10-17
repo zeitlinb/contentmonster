@@ -33,7 +33,7 @@ pnpm --filter cli cli steps           # list the ad-pipeline steps
 ## Start here
 
 - **What this is + decisions:** [`docs/core-charter/contentmonster-charter.md`](docs/core-charter/contentmonster-charter.md)
-- **How we build:** [`docs/tools/gstack/use-gstack.md`](docs/tools/gstack/use-gstack.md) · [`docs/engineering-standards.md`](docs/engineering-standards.md)
+- **How we build:** pstack (open-pstack poteto-mode) · [`docs/engineering-standards.md`](docs/engineering-standards.md)
 - **Agent project memory:** `CLAUDE.md`
 
 Requires Node `>=20` and pnpm (`packageManager` pins the version). Secrets live in

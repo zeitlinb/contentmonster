@@ -1,0 +1,7 @@
+{
+  "class": "app",
+  "commands": {
+    "install": "pnpm install --frozen-lockfile",
+    "verify": "pnpm lint && pnpm check-types && pnpm build"
+  }
+}
