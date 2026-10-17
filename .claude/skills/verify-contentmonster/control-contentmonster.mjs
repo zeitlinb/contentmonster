@@ -162,15 +162,18 @@ function pinnedPnpm() {
 }
 
 function toolchain() {
-  const pnpm = which("pnpm");
-  return {
+  const tools = {
     node: process.execPath,
     nodeVersion: process.versions.node,
-    pnpm,
-    pnpmVersion: pnpm === null ? null : (tryRun(pnpm, ["--version"])?.trim() ?? null),
+    pnpm: which("pnpm"),
     pnpmPinned: pinnedPnpm(),
     tmux: which("tmux"),
   };
+  const version =
+    tools.pnpm === null
+      ? null
+      : sandboxSpawn(`${tagPrefix}-toolchain`, tools, tools.pnpm, ["--version"]);
+  return { ...tools, pnpmVersion: version?.status === 0 ? version.stdout.trim() : null };
 }
 
 function premiseChecks(tools) {
@@ -517,7 +520,10 @@ function egressRefused(tools) {
   const probe = sandboxSpawn(`${tagPrefix}-doctor`, tools, tools.node, ["-e", TCP_PROBE], {
     extraEnv: { NODE_OPTIONS: "" },
   });
-  const result = probe.status === 0 ? JSON.parse(probe.stdout || "{}") : {};
+  let result = {};
+  try {
+    result = JSON.parse(probe.stdout);
+  } catch {}
   return {
     ok: result.error === "EPERM",
     detail:
@@ -621,11 +627,9 @@ function info() {
 
 function driveDirs(state) {
   if (!state?.runDir || !existsSync(state.runDir)) return [];
-  return readdirSync(state.runDir, { withFileTypes: true })
-    .filter(
-      (entry) => entry.isDirectory() && existsSync(join(state.runDir, entry.name, "spec.json")),
-    )
-    .map((entry) => join(state.runDir, entry.name))
+  return readdirSync(state.runDir, { recursive: true })
+    .filter((path) => path.endsWith("/spec.json") || path === "spec.json")
+    .map((path) => join(state.runDir, dirname(path)))
     .sort();
 }
 
@@ -656,7 +660,10 @@ function up() {
   const startedAt = new Date();
   const runDir = join(evidenceRoot, stamp(startedAt));
   mkdirSync(runDir, { recursive: true });
-  const storeDir = tryRun(tools.pnpm, ["store", "path"], { cwd: checkout })?.trim();
+  const store = sandboxSpawn(`${tagPrefix}-store`, tools, tools.pnpm, ["store", "path"], {
+    extraEnv: { HOME: homedir() },
+  });
+  const storeDir = store.status === 0 ? store.stdout.trim() : null;
   const cacheDir = join(homedir(), "Library", "Caches", "pnpm");
   if (!storeDir || !existsSync(storeDir) || !existsSync(cacheDir)) {
     fail(
