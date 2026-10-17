@@ -133,7 +133,10 @@ function readJsonLines(path) {
 }
 
 function stamp(date = new Date()) {
-  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  return date
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d+Z$/, "Z");
 }
 
 function localTime(date) {
@@ -237,7 +240,11 @@ function secretFileNames() {
 }
 
 function outerCheckout() {
-  const common = gitIn(checkout, ["rev-parse", "--path-format=absolute", "--git-common-dir"]).trim();
+  const common = gitIn(checkout, [
+    "rev-parse",
+    "--path-format=absolute",
+    "--git-common-dir",
+  ]).trim();
   const main = realpathSync(dirname(common));
   return main === checkout ? null : main;
 }
@@ -325,7 +332,9 @@ function sourceFingerprint() {
   const inputs = SOURCE_INPUTS.filter((input) => existsSync(join(checkout, input)));
   const hasher = createHash("sha256");
   hasher.update(git(["ls-tree", "-r", "HEAD", "--", ...inputs]));
-  hasher.update(git(["diff", "HEAD", "--binary", "--no-color", "--no-ext-diff", "--", ...inputs], "buffer"));
+  hasher.update(
+    git(["diff", "HEAD", "--binary", "--no-color", "--no-ext-diff", "--", ...inputs], "buffer"),
+  );
   const untracked = git(["ls-files", "--others", "--exclude-standard", "-z", "--", ...inputs])
     .split("\0")
     .filter(Boolean);
@@ -336,7 +345,9 @@ function sourceFingerprint() {
   return {
     fingerprint: hasher.digest("hex").slice(0, 16),
     commit: git(["rev-parse", "HEAD"]).trim(),
-    changedFiles: git(["status", "--porcelain", "--", ...inputs]).split("\n").filter(Boolean).length,
+    changedFiles: git(["status", "--porcelain", "--", ...inputs])
+      .split("\n")
+      .filter(Boolean).length,
     inputs,
   };
 }
@@ -557,7 +568,8 @@ function healthChecks(tools, state) {
 }
 
 function printChecks(checks) {
-  for (const check of checks) console.log(`${check.ok ? "OK  " : "FAIL"} ${check.name}: ${check.detail}`);
+  for (const check of checks)
+    console.log(`${check.ok ? "OK  " : "FAIL"} ${check.name}: ${check.detail}`);
   return checks.every((check) => check.ok);
 }
 
@@ -571,7 +583,10 @@ function doctor() {
       `INFO source: ${source.fingerprint} at ${source.commit.slice(0, 12)}, ${source.changedFiles} changed input file(s); at up ${state.sourceAtUp.fingerprint}. tsx compiles apps/cli and packages/core on every run, so a drive always runs the current source and records its fingerprint`,
     );
     const drives = driveDirs(state);
-    const denied = drives.reduce((sum, dir) => sum + (readJson(join(dir, "denials.json"))?.length ?? 0), 0);
+    const denied = drives.reduce(
+      (sum, dir) => sum + (readJson(join(dir, "denials.json"))?.length ?? 0),
+      0,
+    );
     const hosts = drives.flatMap((dir) => readJsonLines(join(dir, "egress.jsonl")));
     console.log(
       `INFO egress: ${drives.length} drive(s) this run, ${denied} sandbox refusal line(s), ${hosts.length} recorded outbound attempt(s). \`egress\` lists them`,
@@ -607,7 +622,9 @@ function info() {
 function driveDirs(state) {
   if (!state?.runDir || !existsSync(state.runDir)) return [];
   return readdirSync(state.runDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && existsSync(join(state.runDir, entry.name, "spec.json")))
+    .filter(
+      (entry) => entry.isDirectory() && existsSync(join(state.runDir, entry.name, "spec.json")),
+    )
     .map((entry) => join(state.runDir, entry.name))
     .sort();
 }
@@ -629,7 +646,9 @@ function up() {
     cleanup({ exit: false });
   }
   if (tmuxServerUp() || markedProcesses().length > 0) {
-    fail(`up refused: tmux server ${tmuxSocket} or a process marked with this state dir is running without state. Run cleanup`);
+    fail(
+      `up refused: tmux server ${tmuxSocket} or a process marked with this state dir is running without state. Run cleanup`,
+    );
   }
   mkdirSync(sandboxHome, { recursive: true });
   mkdirSync(sandboxTmp, { recursive: true });
@@ -640,7 +659,9 @@ function up() {
   const storeDir = tryRun(tools.pnpm, ["store", "path"], { cwd: checkout })?.trim();
   const cacheDir = join(homedir(), "Library", "Caches", "pnpm");
   if (!storeDir || !existsSync(storeDir) || !existsSync(cacheDir)) {
-    fail(`up refused: the local pnpm store (${storeDir}) or metadata cache (${cacheDir}) is missing; this skill installs offline only`);
+    fail(
+      `up refused: the local pnpm store (${storeDir}) or metadata cache (${cacheDir}) is missing; this skill installs offline only`,
+    );
   }
   const installLog = join(runDir, "install.log");
   const installTag = `${tagPrefix}-install-${stamp(startedAt)}`;
@@ -662,8 +683,12 @@ function up() {
   sleep(1000);
   writeJson(join(runDir, "install-denials.json"), readDenials(installTag, startedAt) ?? []);
   if (install.status !== 0) {
-    console.error(`${install.stdout ?? ""}${install.stderr ?? ""}`.split("\n").slice(-20).join("\n"));
-    fail(`up failed: the offline install exited ${install.status ?? install.signal}. A package missing from the local store needs a networked \`pnpm install\` outside this skill`);
+    console.error(
+      `${install.stdout ?? ""}${install.stderr ?? ""}`.split("\n").slice(-20).join("\n"),
+    );
+    fail(
+      `up failed: the offline install exited ${install.status ?? install.signal}. A package missing from the local store needs a networked \`pnpm install\` outside this skill`,
+    );
   }
   const state = {
     skill: SKILL,
@@ -680,7 +705,9 @@ function up() {
   const ready = drive(state, tools, { name: "up-ready", argv: ["cli", "--version"], timeout: 60 });
   const version = ready.stdout.trim();
   if (ready.exit.code !== 0 || version !== "0.1.0.0") {
-    fail(`up failed: \`contentmonster --version\` exited ${ready.exit.code} with "${version}". See ${ready.dir}`);
+    fail(
+      `up failed: \`contentmonster --version\` exited ${ready.exit.code} with "${version}". See ${ready.dir}`,
+    );
   }
   console.log(`up: contentmonster ${version} ready in the sandbox, evidence ${runDir}`);
 }
@@ -716,8 +743,13 @@ function run(argv) {
   }
   const script = options.script ?? "cli";
   const index = String(driveDirs(state).length + 1).padStart(2, "0");
-  const name = options.out ?? `${index}-${[options.script, options.rest[0]].filter(Boolean)[0] ?? "noargs"}`;
-  const result = drive(state, tools, { name, argv: [script, ...options.rest], timeout: options.timeout });
+  const name =
+    options.out ?? `${index}-${[options.script, options.rest[0]].filter(Boolean)[0] ?? "noargs"}`;
+  const result = drive(state, tools, {
+    name,
+    argv: [script, ...options.rest],
+    timeout: options.timeout,
+  });
   process.exit(result.exit.timedOut ? 124 : (result.exit.code ?? 1));
 }
 
@@ -774,7 +806,10 @@ function drive(state, tools, { name, argv, timeout }) {
     writeJson(exitPath, { code: null, signal: null, timedOut: true, stoppedPids: stopped });
   }
   const pane = tmux(["capture-pane", "-p", "-J", "-S", "-", "-E", "-", "-t", `=${driveSession}:`]);
-  writeFileSync(join(dir, "transcript.txt"), `${(pane.stdout ?? "").trimEnd()}\n`);
+  writeFileSync(
+    join(dir, "transcript.txt"),
+    `${(pane.stdout ?? "").replace(/\n{3,}/g, "\n\n").trimEnd()}\n`,
+  );
   tmux(["kill-server"]);
   writeJson(statePath, { ...state, drive: null });
   const statusAfter = worktreeStatus();
@@ -792,10 +827,16 @@ function drive(state, tools, { name, argv, timeout }) {
   const denials = readDenials(tag, startedAt);
   writeJson(join(dir, "denials.json"), denials ?? []);
   const exit = readJson(exitPath);
-  const stdout = existsSync(join(dir, "stdout.txt")) ? readFileSync(join(dir, "stdout.txt"), "utf8") : "";
-  const stderr = existsSync(join(dir, "stderr.txt")) ? readFileSync(join(dir, "stderr.txt"), "utf8") : "";
+  const stdout = existsSync(join(dir, "stdout.txt"))
+    ? readFileSync(join(dir, "stdout.txt"), "utf8")
+    : "";
+  const stderr = existsSync(join(dir, "stderr.txt"))
+    ? readFileSync(join(dir, "stderr.txt"), "utf8")
+    : "";
   const attempts = readJsonLines(join(dir, "egress.jsonl"));
-  const wrote = writes.statusAdded.length + writes.statusRemoved.length > 0 || sourceBefore.fingerprint !== sourceAfter.fingerprint;
+  const wrote =
+    writes.statusAdded.length + writes.statusRemoved.length > 0 ||
+    sourceBefore.fingerprint !== sourceAfter.fingerprint;
   appendFileSync(
     join(state.runDir, "actions.log"),
     `${JSON.stringify({ ts: startedAt.toISOString(), name, command: `pnpm --filter cli ${argv.join(" ")}`, exit, denials: denials?.length ?? null, attempts: attempts.length, wrote })}\n`,
@@ -858,7 +899,9 @@ function egress() {
     const denials = readJson(join(dir, "denials.json")) ?? [];
     const attempts = readJsonLines(join(dir, "egress.jsonl"));
     console.log(`${dir.slice(state.runDir.length + 1)}: ${spec.display}`);
-    console.log(`  refusals: ${denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`);
+    console.log(
+      `  refusals: ${denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`,
+    );
     console.log(
       `  recorded attempts: ${attempts.length === 0 ? "none" : [...new Set(attempts.map((row) => `${row.kind} ${row.host}${row.port ? `:${row.port}` : ""}`))].join("; ")}`,
     );
@@ -868,7 +911,8 @@ function egress() {
 function selftest() {
   const tools = toolchain();
   const state = requireState();
-  if (tmuxServerUp()) fail(`selftest refused: tmux server ${tmuxSocket} is up. Wait for the drive or run cleanup`);
+  if (tmuxServerUp())
+    fail(`selftest refused: tmux server ${tmuxSocket} is up. Wait for the drive or run cleanup`);
   const startedAt = new Date();
   const dir = join(state.runDir, `selftest-${stamp(startedAt)}`);
   const probeDir = join(stateDir, "probe");
@@ -877,8 +921,18 @@ function selftest() {
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(probeDir, "apps", "cli", ".env"), "VERIFY_DUMMY=not-a-secret\n");
   writeFileSync(join(probeDir, "credentials", "drive-service-account.json"), '{"dummy":true}\n');
-  const tmuxStarted = tmux(["-f", tmuxConf, "new-session", "-d", "-s", `${tmuxSocket}-selftest`, "/bin/sleep", "60"]);
-  if (tmuxStarted.status !== 0) fail(`selftest could not start its tmux stimulus: ${tmuxStarted.stderr.trim()}`);
+  const tmuxStarted = tmux([
+    "-f",
+    tmuxConf,
+    "new-session",
+    "-d",
+    "-s",
+    `${tmuxSocket}-selftest`,
+    "/bin/sleep",
+    "60",
+  ]);
+  if (tmuxStarted.status !== 0)
+    fail(`selftest could not start its tmux stimulus: ${tmuxStarted.stderr.trim()}`);
   const outer = outerCheckout();
   const read = (path) =>
     probeScript(
@@ -940,7 +994,11 @@ function selftest() {
       script: exec("/usr/bin/osascript", ["-e", "return 1"]),
     },
     { guard: "exec-launchctl", expect: "refused", script: exec("/bin/launchctl", ["version"]) },
-    { guard: "read-env-file", expect: "refused", script: read(join(probeDir, "apps", "cli", ".env")) },
+    {
+      guard: "read-env-file",
+      expect: "refused",
+      script: read(join(probeDir, "apps", "cli", ".env")),
+    },
     {
       guard: "read-credentials",
       expect: "refused",
@@ -948,14 +1006,29 @@ function selftest() {
     },
     ...(outer === null
       ? []
-      : [{ guard: "read-outer-checkout", expect: "refused", script: read(join(outer, "package.json")) }]),
+      : [
+          {
+            guard: "read-outer-checkout",
+            expect: "refused",
+            script: read(join(outer, "package.json")),
+          },
+        ]),
     {
       guard: "caller-env-scrubbed",
       expect: "absent",
-      script: probeScript(`report({present:Object.keys(process.env).filter((k)=>/KEY|TOKEN|SECRET|GEMINI|GOOGLE/.test(k))})`),
-      callerEnv: { GEMINI_API_KEY: "verify-dummy-not-a-key", GOOGLE_APPLICATION_CREDENTIALS: "/nonexistent" },
+      script: probeScript(
+        `report({present:Object.keys(process.env).filter((k)=>/KEY|TOKEN|SECRET|GEMINI|GOOGLE/.test(k))})`,
+      ),
+      callerEnv: {
+        GEMINI_API_KEY: "verify-dummy-not-a-key",
+        GOOGLE_APPLICATION_CREDENTIALS: "/nonexistent",
+      },
     },
-    { guard: "control-read-checkout", expect: "works", script: read(join(checkout, "package.json")) },
+    {
+      guard: "control-read-checkout",
+      expect: "works",
+      script: read(join(checkout, "package.json")),
+    },
     {
       guard: "control-unix-socket-in-state-tmp",
       expect: "works",
