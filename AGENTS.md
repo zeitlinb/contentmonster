@@ -59,3 +59,5 @@ First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surf
 - **Authority content** (lead-gen) replaced the books pipeline; its scope is tracked in memory (`[[project-authority-content-strategy]]`), kept out of canon.
 - **`/last30days`** v3.8.0 needs Python 3.12+ and a ScrapeCreators key. See `docs/tools/last30days/reference.md`.
 - **Then:** resume the ad pipeline (Drive sync → generate-scene; needs HyperFrames + provider SDKs — D3).
+
+Known pre-existing failure: `pnpm format:check` fails on main (vendored skill files and a few unformatted files), so it is left out of CI until fixed; tracked as HEN-1601.
