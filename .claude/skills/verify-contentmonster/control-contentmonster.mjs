@@ -498,6 +498,12 @@ function summarizeDenials(denials) {
   return [...totals].map(([key, total]) => `${key} x${total}`);
 }
 
+function describeAttempts(rows) {
+  return [
+    ...new Set(rows.map((row) => `${row.kind} ${row.host}${row.port ? `:${row.port}` : ""}`)),
+  ].join("; ");
+}
+
 function sandboxSpawn(tag, tools, command, args, options = {}) {
   return spawnSync(SANDBOX_EXEC, ["-p", sandboxProfile(tag, tools), command, ...args], {
     encoding: "utf8",
@@ -857,7 +863,7 @@ function drive(state, tools, { name, argv, timeout }) {
     `sandbox refusals: ${denials === null ? "unreadable (log show failed)" : denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`,
   );
   console.log(
-    `recorded outbound attempts: ${attempts.length === 0 ? "none" : [...new Set(attempts.map((row) => `${row.kind} ${row.host}${row.port ? `:${row.port}` : ""}`))].join("; ")}`,
+    `recorded outbound attempts: ${attempts.length === 0 ? "none" : describeAttempts(attempts)}`,
   );
   console.log(
     `writes: ${wrote ? [...writes.statusAdded.map((line) => `+ ${line}`), ...writes.statusRemoved.map((line) => `- ${line}`), sourceBefore.fingerprint !== sourceAfter.fingerprint ? "source fingerprint changed" : null].filter(Boolean).join("; ") : "none"}`,
@@ -899,7 +905,7 @@ function egress() {
   const installDenials = readJson(join(state.runDir, "install-denials.json")) ?? [];
   const installAttempts = readJsonLines(join(state.runDir, "install-egress.jsonl"));
   console.log(
-    `install: ${installDenials.length} refusal line(s) ${summarizeDenials(installDenials).join("; ")}; ${installAttempts.length} recorded attempt(s) ${[...new Set(installAttempts.map((row) => `${row.kind} ${row.host}`))].join("; ")}`,
+    `install: ${installDenials.length} refusal line(s) ${summarizeDenials(installDenials).join("; ")}; ${installAttempts.length} recorded attempt(s) ${describeAttempts(installAttempts)}`,
   );
   for (const dir of driveDirs(state)) {
     const spec = readJson(join(dir, "spec.json"));
@@ -910,7 +916,7 @@ function egress() {
       `  refusals: ${denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`,
     );
     console.log(
-      `  recorded attempts: ${attempts.length === 0 ? "none" : [...new Set(attempts.map((row) => `${row.kind} ${row.host}${row.port ? `:${row.port}` : ""}`))].join("; ")}`,
+      `  recorded attempts: ${attempts.length === 0 ? "none" : describeAttempts(attempts)}`,
     );
   }
 }
@@ -969,7 +975,6 @@ function selftest() {
     {
       guard: "dns-hosted-name",
       expect: "refused",
-      needsDenial: true,
       script: probeScript(
         `require("dns").lookup("${HOSTED_PROBE_HOST}",(e,a)=>report(e?{error:e.code}:{address:a}));`,
       ),
@@ -977,7 +982,6 @@ function selftest() {
     {
       guard: "fetch-hosted-api",
       expect: "refused",
-      needsDenial: true,
       script: probeScript(
         `fetch("https://${HOSTED_PROBE_HOST}/").then((r)=>report({status:r.status}),(e)=>report({error:(e.cause&&e.cause.code)||e.message}));`,
       ),
@@ -1065,13 +1069,10 @@ function selftest() {
   sleep(1500);
   for (const result of results) {
     result.denials = readDenials(result.tag, startedAt) ?? [];
-    result.recorded = readJsonLines(join(dir, `${result.guard}.egress.jsonl`)).map(
-      (row) => `${row.kind} ${row.host}${row.port ? `:${row.port}` : ""}`,
-    );
+    result.recorded = describeAttempts(readJsonLines(join(dir, `${result.guard}.egress.jsonl`)));
     result.held =
       result.expect === "refused"
-        ? REFUSAL_CODES.includes(result.observed.error) &&
-          (!result.needsDenial || result.denials.length > 0)
+        ? REFUSAL_CODES.includes(result.observed.error) && result.denials.length > 0
         : result.expect === "absent"
           ? Array.isArray(result.observed.present) && result.observed.present.length === 0
           : result.observed.read === true || result.observed.connected === true;
@@ -1080,7 +1081,7 @@ function selftest() {
   for (const result of results) {
     const denial = summarizeDenials(result.denials).join("; ") || "no kernel line";
     console.log(
-      `${result.held ? "HELD" : "FAIL"} ${result.guard} (expect ${result.expect}): observed ${JSON.stringify(result.observed)}; ${denial}${result.recorded.length ? `; recorder saw ${[...new Set(result.recorded)].join(", ")}` : ""}`,
+      `${result.held ? "HELD" : "FAIL"} ${result.guard} (expect ${result.expect}): observed ${JSON.stringify(result.observed)}; ${denial}${result.recorded ? `; recorder saw ${result.recorded}` : ""}`,
     );
   }
   console.log(`evidence: ${join(dir, "selftest.json")}`);
