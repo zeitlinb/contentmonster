@@ -10,6 +10,7 @@ import {
   realpathSync,
   renameSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { homedir } from "node:os";
@@ -46,9 +47,10 @@ Commands:
                             the sandbox and require the refusal, plus the controls
                             that must still work. Exits 0 only when all hold.
   cleanup                   Stop every process this checkout started (tmux server,
-                            runner, CLI), found by the tmux socket and this
-                            checkout's state path, delete the state directory and
-                            keep the evidence. Exits 1 if anything remains.
+                            runner, CLI), found by the tmux socket, the recorded
+                            process groups and this checkout's state path, delete
+                            the state directory and keep the evidence. Exits 1
+                            if anything remains.
   --help                    Print this help.
 
 Run with Node 24 first on PATH: export PATH=/opt/homebrew/opt/node@24/bin:$PATH
@@ -60,7 +62,9 @@ const NODE_MAJOR = 24;
 const UNROUTED_IP = "192.0.2.1";
 const HOSTED_PROBE_HOST = "generativelanguage.googleapis.com";
 const REFUSAL_CODES = ["EPERM", "EACCES", "ENOTFOUND"];
-const LAUNCHERS = ["open", "osascript", "launchctl", "tmux", "screen", "ssh"];
+const LAUNCHERS = ["open", "osascript", "launchctl", "tmux", "screen", "ssh", "brew"];
+const GROUP_WRAPPER =
+  'my $file = shift; setpgrp(0, 0); open(my $h, ">", $file) or die "$file: $!"; print $h $$; close $h; exec { $ARGV[0] } @ARGV or die "exec $ARGV[0]: $!";';
 const SOURCE_INPUTS = [
   "apps/cli",
   "packages",
@@ -84,6 +88,7 @@ const sandboxHome = join(stateDir, "home");
 const sandboxTmp = join(stateDir, "tmp");
 const tmuxConf = join(stateDir, "tmux.conf");
 const evidenceRoot = join(cacheRoot, "evidence", hash);
+const groupsDir = join(cacheRoot, "groups", hash);
 const tmuxSocket = `${SKILL}-${hash}`;
 const driveSession = `${tmuxSocket}-drive`;
 const tagPrefix = `${SKILL}-${hash}`;
@@ -419,6 +424,34 @@ function stopProcesses(pids) {
   return targets;
 }
 
+let groupCount = 0;
+
+function groupFile(tag) {
+  mkdirSync(groupsDir, { recursive: true });
+  groupCount += 1;
+  return join(groupsDir, `${tag}-${process.pid}-${groupCount}.pid`);
+}
+
+function groupMembers(pgid, sinceMs) {
+  const out = tryRun("/bin/ps", ["-axo", "pid=,pgid=,lstart="]) ?? "";
+  return out
+    .split("\n")
+    .map((line) => line.trim().match(/^(\d+)\s+(\d+)\s+(.+)$/))
+    .filter((match) => match !== null)
+    .filter((match) => Number(match[2]) === pgid && Date.parse(match[3]) >= sinceMs)
+    .map((match) => Number(match[1]))
+    .filter((pid) => pid !== process.pid);
+}
+
+function reapGroup(path) {
+  if (!existsSync(path)) return [];
+  const pgid = Number(readFileSync(path, "utf8").trim());
+  const members = pgid > 1 ? groupMembers(pgid, statSync(path).mtimeMs - 1000) : [];
+  const stopped = members.length > 0 ? stopProcesses(members) : [];
+  rmSync(path, { force: true });
+  return stopped;
+}
+
 function tmux(args) {
   const env = { ...process.env };
   delete env.TMUX;
@@ -505,13 +538,19 @@ function describeAttempts(rows) {
 }
 
 function sandboxSpawn(tag, tools, command, args, options = {}) {
-  return spawnSync(SANDBOX_EXEC, ["-p", sandboxProfile(tag, tools), command, ...args], {
-    encoding: "utf8",
-    timeout: 30000,
-    cwd: checkout,
-    ...options,
-    env: childEnv(tools, options.extraEnv ?? {}),
-  });
+  const group = groupFile(tag);
+  const result = spawnSync(
+    "/usr/bin/perl",
+    ["-e", GROUP_WRAPPER, group, SANDBOX_EXEC, "-p", sandboxProfile(tag, tools), command, ...args],
+    {
+      encoding: "utf8",
+      timeout: 30000,
+      cwd: checkout,
+      ...options,
+      env: childEnv(tools, options.extraEnv ?? {}),
+    },
+  );
+  return { ...result, reaped: reapGroup(group) };
 }
 
 function probeScript(body) {
@@ -693,6 +732,7 @@ function up() {
     { timeout: 300000, extraEnv: { VERIFY_EGRESS_LOG: join(runDir, "install-egress.jsonl") } },
   );
   writeFileSync(installLog, `${install.stdout ?? ""}${install.stderr ?? ""}`);
+  writeJson(join(runDir, "install-reaped.json"), install.reaped);
   sleep(1000);
   writeJson(join(runDir, "install-denials.json"), readDenials(installTag, startedAt) ?? []);
   if (install.status !== 0) {
@@ -816,7 +856,8 @@ function drive(state, tools, { name, argv, timeout }) {
   if (!existsSync(exitPath)) {
     const child = readJson(join(dir, "child.json"));
     const stopped = stopProcesses([runnerPid, ...(child ? [child.pid] : [])]);
-    writeJson(exitPath, { code: null, signal: null, timedOut: true, stoppedPids: stopped });
+    const reaped = child ? reapGroup(child.group) : [];
+    writeJson(exitPath, { code: null, signal: null, timedOut: true, stoppedPids: stopped, reaped });
   }
   const pane = tmux(["capture-pane", "-p", "-J", "-S", "-", "-E", "-", "-t", `=${driveSession}:`]);
   writeFileSync(
@@ -868,6 +909,11 @@ function drive(state, tools, { name, argv, timeout }) {
   console.log(
     `writes: ${wrote ? [...writes.statusAdded.map((line) => `+ ${line}`), ...writes.statusRemoved.map((line) => `- ${line}`), sourceBefore.fingerprint !== sourceAfter.fingerprint ? "source fingerprint changed" : null].filter(Boolean).join("; ") : "none"}`,
   );
+  if (exit.reaped?.length) {
+    console.log(
+      `reaped after exit: PIDs ${exit.reaped.join(",")} were still running in the run's process group`,
+    );
+  }
   console.log(`evidence: ${dir}`);
   return { dir, exit, stdout, stderr, denials, attempts, writes };
 }
@@ -880,8 +926,16 @@ function runner(dir) {
     cwd: spec.cwd,
     env: spec.env,
     stdio: ["inherit", "pipe", "pipe"],
+    detached: true,
   });
-  writeJson(join(dir, "child.json"), { pid: child.pid, start: processStart(child.pid) });
+  const group = groupFile(spec.tag);
+  writeFileSync(group, String(child.pid));
+  writeJson(join(dir, "child.json"), {
+    pid: child.pid,
+    pgid: child.pid,
+    start: processStart(child.pid),
+    group,
+  });
   const out = [];
   const err = [];
   child.stdout.on("data", (chunk) => {
@@ -892,10 +946,16 @@ function runner(dir) {
     err.push(chunk);
     process.stderr.write(chunk);
   });
+  let reaped = [];
+  let ms = null;
+  child.on("exit", () => {
+    ms = Date.now() - started;
+    reaped = reapGroup(group);
+  });
   child.on("close", (code, signal) => {
     writeFileSync(join(dir, "stdout.txt"), Buffer.concat(out));
     writeFileSync(join(dir, "stderr.txt"), Buffer.concat(err));
-    writeJson(join(dir, "exit.json"), { code, signal, timedOut: false, ms: Date.now() - started });
+    writeJson(join(dir, "exit.json"), { code, signal, timedOut: false, ms, reaped });
     console.log(`[exit ${code ?? signal}]`);
   });
 }
@@ -1005,6 +1065,9 @@ function selftest() {
       script: exec("/usr/bin/osascript", ["-e", "return 1"]),
     },
     { guard: "exec-launchctl", expect: "refused", script: exec("/bin/launchctl", ["version"]) },
+    ...(which("brew") === null
+      ? []
+      : [{ guard: "exec-brew", expect: "refused", script: exec(which("brew"), ["--version"]) }]),
     {
       guard: "read-env-file",
       expect: "refused",
@@ -1097,16 +1160,21 @@ function cleanup({ exit = true } = {}) {
     if (child && alive(child.pid, child.start)) pids.add(child.pid);
   }
   const stopped = pids.size > 0 ? stopProcesses([...pids]) : [];
+  const groups = existsSync(groupsDir) ? readdirSync(groupsDir) : [];
+  for (const name of groups) stopped.push(...reapGroup(join(groupsDir, name)));
   tmux(["kill-server"]);
   rmSync(stateDir, { recursive: true, force: true });
+  if (existsSync(groupsDir) && readdirSync(groupsDir).length === 0)
+    rmSync(groupsDir, { recursive: true });
   const leftover = markedProcesses();
   const serverUp = tmuxServerUp();
+  const recorded = existsSync(groupsDir) ? readdirSync(groupsDir) : [];
   console.log(
     `cleanup: stopped ${stopped.length ? stopped.join(",") : "nothing"}; removed ${stateDir}; kept evidence ${evidenceRoot}`,
   );
-  if (leftover.length > 0 || serverUp) {
+  if (leftover.length > 0 || serverUp || recorded.length > 0) {
     console.error(
-      `cleanup: still running: ${[...leftover.map(String), serverUp ? `tmux server ${tmuxSocket}` : null].filter(Boolean).join(", ")}`,
+      `cleanup: still running: ${[...leftover.map(String), serverUp ? `tmux server ${tmuxSocket}` : null, ...recorded.map((name) => `group ${name}`)].filter(Boolean).join(", ")}`,
     );
     if (exit) process.exit(1);
   }
