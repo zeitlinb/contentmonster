@@ -48,10 +48,10 @@ First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surf
 ## Current status (2026-06-22)
 
 - **Monorepo:** Turborepo + pnpm; `apps/web` + `apps/cli` + `packages/core`. Vercel Root Directory = `apps/web`.
-- **HyperFrames-first (2026-06-22):** default layout/video engine; skills installed (`.agents/skills` + `.claude/skills`), `hyperframes-lab/` smoke test renders green (Node 22 + FFmpeg 8).
+- **HyperFrames-first (2026-06-22):** default layout/video engine; the HyperFrames skills come from the global install (`~/.claude/skills`), none are vendored here; `hyperframes-lab/` smoke test renders green (Node 22 + FFmpeg 8).
 - **DB deferred** (file-based JSON + Zod; `packages/db` slot open). No app logic yet — `packages/core` modules are typed stubs.
 - **Authority content** (lead-gen) replaced the books pipeline; its scope is tracked in memory (`[[project-authority-content-strategy]]`), kept out of canon.
-- **`/last30days`** v3.8.0 needs Python 3.12+ and a ScrapeCreators key. See `docs/tools/last30days/reference.md`.
+- **`/last30days`** is the global install; it needs Python 3.12+ and a ScrapeCreators key. See `docs/tools/last30days/reference.md`.
 - **Then:** resume the ad pipeline (Drive sync → generate-scene; needs HyperFrames + provider SDKs — D3).
 
-Known pre-existing failure: `pnpm format:check` fails on main (vendored skill files and a few unformatted files), so it is left out of CI until fixed; tracked as HEN-1601.
+Known pre-existing failure: `pnpm format:check` fails on main (four unformatted files), so it is left out of CI until fixed; tracked as HEN-1601.
