@@ -28,7 +28,9 @@ Commands:
                             \`contentmonster --version\` as the readiness check.
                             Does nothing when this checkout is already up and its
                             install inputs have not changed.
-  doctor                    Read-only health check. One OK, FAIL or INFO line per
+  doctor                    Health check. Changes nothing in the checkout, state or
+                            evidence; writes and deletes a group record under
+                            groups/<hash>/. One OK, FAIL or INFO line per
                             check; exits 0 only when every check passes.
   info                      Print the checkout, hash, paths, tmux socket, toolchain,
                             fingerprints and the evidence run directory.
