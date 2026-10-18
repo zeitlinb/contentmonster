@@ -13,11 +13,11 @@
   subdir; the symlink was re-pointed to the nested dir so every project resolves it). Repo:
   `github.com/mvanhorn/last30days-skill`. A thin `SKILL.md` is vendored at `.claude/skills/last30days/`
   for discoverability; the engine stays global.
-- `disable-model-invocation: true` + `user-invocable: true` → **Brad types `/last30days <topic>`**; the agent never auto-fires it.
+- `user-invocable: true` and model-invocable: Brad or a session runs `/last30days <topic>`.
 - **Python 3.12+ required** (system `python3` is 3.9). The vendored slash command resolves `python3.12`.
 
 ## Run it
-Slash command (Brad): `/last30days <topic>` (also `--quick` / `--deep`, `--days=N`).
+Slash command: `/last30days <topic>` (also `--quick` / `--deep`, `--days=N`).
 **Use default or `--deep` depth** — `--quick` is too shallow and culls Reddit to ~1 thread.
 
 Direct script (agent path):

@@ -42,7 +42,6 @@ First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surf
 - **Vision QA after every step**, before any human sees output.
 - **Sharp = pixel ops; HyperFrames = ALL layout; never rely on AI-rendered text.** HyperFrames-first shop (2026-06-22); Remotion kept as alt/reference.
 - **Video standard = the HyperFrames 7-step pipeline** (`docs/reference/hyperframes-pipeline.md`); start at the `/hyperframes` skill, which routes to the right workflow.
-- **`/last30days <topic>` is Brad-invoked only** (recency research; the agent never auto-fires it).
 
 ## Current status (2026-06-22)
 
