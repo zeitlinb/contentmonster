@@ -65,7 +65,7 @@ The last line is `up: contentmonster 0.1.0.0 ready in the sandbox, evidence <run
 node .claude/skills/verify-contentmonster/control-contentmonster.mjs doctor
 ```
 
-Doctor is read-only. Run it first, and again whenever anything looks off. It prints one `OK` or `FAIL` line per check and exits 0 only when every check passes:
+Doctor changes nothing in the checkout, the state directory or the evidence. Its two sandboxed probes, `pnpm --version` (run with the caller's temp directory and Node's compile cache off, so it leaves no file) and the egress probe, each write a process-group record under `~/.cache/verify-contentmonster/groups/<hash>/`, creating that directory if it is missing, and delete the record when the probe ends. `cleanup` removes the directory. Run doctor first, and again whenever anything looks off. It prints one `OK` or `FAIL` line per check and exits 0 only when every check passes:
 
 - Node 24, the pinned `pnpm`, `tmux` and `sandbox-exec` are present.
 - The checkout holds no `.env*` file and no `credentials/` directory.
@@ -89,16 +89,17 @@ node .claude/skills/verify-contentmonster/control-contentmonster.mjs selftest
 Read the matching file under [`features/`](features/README.md) before you drive. It lists every entry point and the end state that proves each one.
 
 ```bash
-node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out pipeline-steps/cli -- steps
-node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/root -- --help
-node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out generate-scene/cli -- generate-scene --scene kitchen-hero
-node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --script download-assets --out download-assets/script -- -c jaca
+node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out pipeline-steps/example -- steps
+node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/example -- --help
+node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out generate-scene/coffee-bar -- generate-scene --scene coffee-bar
+node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --script download-assets --out download-assets/example -- -c jaca
 node .claude/skills/verify-contentmonster/control-contentmonster.mjs egress
 ```
 
+- These examples use `--out` names that no feature file uses, so running them first does not block a feature bullet.
 - `run -- <args>` runs `pnpm --filter cli cli <args>`, the README's path. `run --script <name> -- <args>` runs `pnpm --filter cli <name> <args>`, the package scripts `download-assets` and `generate-scene`.
 - `run` first runs every doctor check and refuses when one fails.
-- The CLI's stdin is the tmux PTY. Its stdout and stderr are pipes that the runner copies to files and to the pane, so they stay separate.
+- The CLI's stdin is the tmux PTY. Its stdout and stderr are pipes that the runner appends to `stdout.txt` and `stderr.txt` as they arrive and copies to the pane, so they stay separate and a timed-out run keeps what it wrote before it was stopped.
 - `run` prints the command, stdout, stderr, the exit code, the sandbox refusals, the recorded outbound attempts and the writes, then exits with the CLI's exit code. A run that passes `--timeout` (default 60 seconds) is stopped and exits 124.
 - `egress` lists the refusals and recorded hosts of the install and of every run in the current run directory.
 
@@ -141,7 +142,7 @@ Cleanup finds this checkout's processes without needing the state file: the pane
 
 ## Helpers
 
-- `control-contentmonster.mjs` is the whole driver. It needs only Node 24, the pinned `pnpm` and `tmux`, and adds no dependency.
+- `control-contentmonster.mjs` is the whole driver. It is executable, so `.claude/skills/verify-contentmonster/control-contentmonster.mjs <command>` works the same as the `node` form when Node 24 is first on `PATH`. It needs only Node 24, the pinned `pnpm` and `tmux`, and adds no dependency.
 - `egress-record.mjs` is the outbound-attempt recorder that each sandboxed Node process loads. Do not run it by hand.
 - `features/` is the behavior map. Keep it true in the same PR as any change to `apps/cli`.
 - `.gitignore` does not ignore `.claude/`, so plain `git add` picks up these files. `pnpm format:check` checks the `.mjs` files here (`.prettierignore` skips `*.md`), so run `pnpm exec prettier --write .claude/skills/verify-contentmonster` after an edit. `pnpm format:check` already fails on main for four other files (HEN-1601).

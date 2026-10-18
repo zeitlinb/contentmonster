@@ -28,6 +28,7 @@ Preconditions:
 - **Command help.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/generate-scene -- help generate-scene`. Exit code `0`. `stdout.txt` shows `Usage: contentmonster generate-scene [options]`, `-c, --client <id>  client tenant id (default: "jaca")` and `-s, --scene <id>   scene template id`.
 - **Command flag.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/download-assets -- download-assets --help`. Exit code `0`. `stdout.txt` shows `Usage: contentmonster download-assets [options]` and the `--client` option with default `"jaca"`.
 - **Version.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/version -- --version`. Exit code `0` and `stdout.txt` is `0.1.0.0`.
+- **Short version flag.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/version-short -- -V`. Exit code `0` and `stdout.txt` is `0.1.0.0`.
 - **No command.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/no-command`. Exit code `1`. `stderr.txt` holds the root help after pnpm's `$ tsx src/index.ts` line.
 - **Unknown command.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/unknown -- bogus`. Exit code `1`. `stderr.txt` holds `error: unknown command 'bogus'`.
 - **Proof.** Each run prints `sandbox refusals: none` and `writes: none`, and `writes.json` and `denials.json` agree.

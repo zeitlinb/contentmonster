@@ -13,7 +13,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { homedir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { delimiter, dirname, isAbsolute, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -177,7 +177,9 @@ function toolchain() {
   const version =
     tools.pnpm === null
       ? null
-      : sandboxSpawn(`${tagPrefix}-toolchain`, tools, tools.pnpm, ["--version"]);
+      : sandboxSpawn(`${tagPrefix}-toolchain`, tools, tools.pnpm, ["--version"], {
+          extraEnv: { TMPDIR: tmpdir(), NODE_DISABLE_COMPILE_CACHE: "1" },
+        });
   return { ...tools, pnpmVersion: version?.status === 0 ? version.stdout.trim() : null };
 }
 
@@ -214,7 +216,7 @@ function premiseChecks(tools) {
     detail:
       secrets.length === 0
         ? "no .env* file and no credentials/ directory in the checkout (names only, never read)"
-        : `found ${secrets.join(", ")}; the CLI loads .env through dotenv and may find a real key. Use a clean worktree`,
+        : `found ${secrets.join(", ")}; they may hold a real key. apps/cli declares dotenv, though no source imports it today. Use a clean worktree`,
   });
   return checks;
 }
@@ -936,14 +938,16 @@ function runner(dir) {
     start: processStart(child.pid),
     group,
   });
-  const out = [];
-  const err = [];
+  const stdoutPath = join(dir, "stdout.txt");
+  const stderrPath = join(dir, "stderr.txt");
+  writeFileSync(stdoutPath, "");
+  writeFileSync(stderrPath, "");
   child.stdout.on("data", (chunk) => {
-    out.push(chunk);
+    appendFileSync(stdoutPath, chunk);
     process.stdout.write(chunk);
   });
   child.stderr.on("data", (chunk) => {
-    err.push(chunk);
+    appendFileSync(stderrPath, chunk);
     process.stderr.write(chunk);
   });
   let reaped = [];
@@ -953,8 +957,6 @@ function runner(dir) {
     reaped = reapGroup(group);
   });
   child.on("close", (code, signal) => {
-    writeFileSync(join(dir, "stdout.txt"), Buffer.concat(out));
-    writeFileSync(join(dir, "stderr.txt"), Buffer.concat(err));
     writeJson(join(dir, "exit.json"), { code, signal, timedOut: false, ms, reaped });
     console.log(`[exit ${code ?? signal}]`);
   });
