@@ -1,10 +1,9 @@
-<!-- bz:orders:begin sha=e0d64eaf1f9700aa7b6122d6a2e0b7f8285c0da20adb2542e2631ba33fd0ed59 -->
+<!-- bz:orders:begin sha=9195a568146a2a3d91a5c4e26b6779f7eb08fc78b5a5155895b6c93c75e4e24e -->
 <!-- Generated from zeitlinb/harness ENTERPRISE.md by scripts/orders.mjs. Edit the source and re-render; a hand edit here fails the check. -->
 
 E1. pstack (open-pstack poteto-mode) is the method and governs wherever it speaks.
 E2. A session deletes freely inside its own repo and worktrees, its pstack store and temp folders.
 E3. Deleting anything outside that space, or anything holding unpushed commits or uncommitted work, needs Brad's yes on the exact ls-verified list.
-E4. Nothing restarts after a pause without Brad's word.
 E5. A GitHub workflow runs automatically only for a check that cannot run locally and is declared with its reason and measured minutes in the repo's bz.config.json automaticChecks.
 E6. A ci.yml workflow runs only when a person starts it (workflow_dispatch).
 E7. No repo runs a product cron on GitHub.
