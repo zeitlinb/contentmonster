@@ -24,7 +24,7 @@ Preconditions:
 - **Default tenant.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out download-assets/default -- download-assets`. Exit code `0`. `stdout.txt` is `[download-assets] client=jaca — not implemented yet`.
 - **Client flag.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out download-assets/cli -- download-assets --client jaca`. Exit code `0` and the same line.
 - **Package script.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --script download-assets --out download-assets/script -- -c jaca`. Exit code `0` and the same line. `transcript.txt` shows `$ pnpm --filter cli download-assets -c jaca`.
-- **Second view.** For each run, `writes.json` shows no new `clients/jaca/assets/` line and `denials.json` is `[]`. `run` prints `writes: none` and `sandbox refusals: none`.
+- **Second view.** For each run, `writes.json` shows no new `clients/jaca/assets/` line and `denials.json` is `[]`. `run` prints `writes: none` and `sandbox refusals: none seen in the log; ...`.
 - **Drive sync (unreachable).** The real sync calls the Google Drive API with the key at `credentials/drive-service-account.json`. The sandbox denies reading `credentials/` and every connect, so the run cannot reach Drive. Report `download-drive-sync` as unreachable: hosted Google Drive and a service-account key.
 
 ## Gotchas

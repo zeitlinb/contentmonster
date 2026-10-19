@@ -20,7 +20,7 @@ Preconditions:
 
 - **List the steps.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out pipeline-steps/cli -- steps`. Exit code `0`. `stdout.txt` is exactly these eight lines: `0. prerequisites`, `1. scene-generation`, `2. product-composite`, `3. text-logo-overlay`, `4. size-variant`, `5. refinement-loop`, `6. end-to-end`, `7. video`.
 - **Check the transcript.** Read `transcript.txt` in the same evidence directory. It shows `$ pnpm --filter cli cli steps`, the same eight lines and `[exit 0]`, as the operator's terminal would.
-- **Check the second view.** Read `writes.json` and `denials.json`. `statusAdded` and `statusRemoved` are empty, the two source fingerprints match, and `denials.json` is `[]`. `run` prints `sandbox refusals: none`, `recorded outbound attempts: none` and `writes: none`.
+- **Check the second view.** Read `writes.json` and `denials.json`. `statusAdded` and `statusRemoved` are empty, the two source fingerprints match, and `denials.json` is `[]`. `run` prints `sandbox refusals: none seen in the log; ...`, `recorded outbound attempts: none` and `writes: none`.
 - **Repeat.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out pipeline-steps/repeat -- steps`. `stdout.txt` matches the first run byte for byte.
 
 ## Gotchas
