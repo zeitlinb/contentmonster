@@ -26,7 +26,7 @@ Preconditions:
 - **Short flags.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out generate-scene/short -- generate-scene -c jaca -s kitchen-counter`. Exit code `0` and the same line.
 - **No scene.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out generate-scene/no-scene -- generate-scene`. Exit code `0`. `stdout.txt` is `[generate-scene] client=jaca scene=(none) — not implemented yet`.
 - **Package script.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --script generate-scene --out generate-scene/script -- --scene kitchen-counter`. Exit code `0` and the same line as the CLI run. `transcript.txt` shows `$ pnpm --filter cli generate-scene --scene kitchen-counter`.
-- **Second view.** For each run, `writes.json` shows no new `output/` line and `denials.json` is `[]`. `run` prints `writes: none` and `sandbox refusals: none`.
+- **Second view.** For each run, `writes.json` shows no new `output/` line and `denials.json` is `[]`. `run` prints `writes: none` and `sandbox refusals: none seen in the log; ...`.
 - **Gemini generation (unreachable).** Real generation sends the scene prompt to the Gemini API with a paid key. The child environment holds no key, the sandbox denies reading `.env*` and every connect, and `selftest`'s `fetch-hosted-api` probe shows a `fetch` of `generativelanguage.googleapis.com` refused at the DNS lookup, before any query left the Mac. Report `scene-gemini` as unreachable: hosted, paid Gemini API and a key.
 
 ## Gotchas

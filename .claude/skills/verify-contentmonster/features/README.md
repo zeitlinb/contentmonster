@@ -26,6 +26,7 @@ This directory is the maintained source for verifying the user-facing behavior o
 - Every proof has a second view: `writes.json` for what the run changed in the checkout, and `denials.json` with `egress.jsonl` for what it tried to reach.
 - Record the feature ID and the entry point with every artifact.
 - Report an unreachable path with the command you ran and the unmet precondition. The real Google Drive sync and the real Gemini scene generation are unreachable here by design.
+- `sandbox refusals: none seen in the log` is not proof that nothing was refused: the log stream drops some denials (7 of about 111 in one session on 2026-10-19). Read it with `recorded outbound attempts`. An attempt that the stream did not show is listed as a recorded attempt with no kernel line; report it as an attempt whose refusal the log did not confirm. A `BLIND` run had no working log stream, so report its refusal list as unavailable, not as empty.
 - A sandbox refusal is a result, not a pass. Never report a hosted path as verified because the CLI printed something before the refusal.
 - Do not report a skipped entry point as verified through a different path.
 

@@ -31,7 +31,7 @@ Preconditions:
 - **Short version flag.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/version-short -- -V`. Exit code `0` and `stdout.txt` is `0.1.0.0`.
 - **No command.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/no-command`. Exit code `1`. `stderr.txt` holds the root help after pnpm's `$ tsx src/index.ts` line.
 - **Unknown command.** Run `node .claude/skills/verify-contentmonster/control-contentmonster.mjs run --out help/unknown -- bogus`. Exit code `1`. `stderr.txt` holds `error: unknown command 'bogus'`.
-- **Proof.** Each run prints `sandbox refusals: none` and `writes: none`, and `writes.json` and `denials.json` agree.
+- **Proof.** Each run prints `sandbox refusals: none seen in the log; ...` and `writes: none`, and `writes.json` and `denials.json` agree.
 
 ## Gotchas
 
