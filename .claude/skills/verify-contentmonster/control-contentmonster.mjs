@@ -15,6 +15,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { isIP } from "node:net";
 import { homedir, tmpdir } from "node:os";
 import { delimiter, dirname, isAbsolute, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -51,10 +52,10 @@ Commands:
                             the sandbox and require the refusal, plus the controls
                             that must still work. Exits 0 only when all hold.
   cleanup                   Stop every process this checkout started (tmux server,
-                            runner, CLI), found by the tmux socket, the recorded
-                            process groups and this checkout's state path, delete
-                            the state directory and keep the evidence. Exits 1
-                            if anything remains.
+                            runner, CLI, log streams), found by the tmux socket,
+                            the process-group and log-stream records and this
+                            checkout's state path, delete the state directory and
+                            keep the evidence. Exits 1 if anything remains.
   --help                    Print this help.
 
 Run with Node 24 first on PATH: export PATH=/opt/homebrew/opt/node@24/bin:$PATH
@@ -69,6 +70,11 @@ const REFUSAL_CODES = ["EPERM", "EACCES", "ENOTFOUND"];
 const LAUNCHERS = ["open", "osascript", "launchctl", "tmux", "screen", "ssh", "brew"];
 const GROUP_WRAPPER =
   'my $file = shift; setpgrp(0, 0); open(my $h, ">", $file) or die "$file: $!"; print $h $$; close $h; exec { $ARGV[0] } @ARGV or die "exec $ARGV[0]: $!";';
+const WATCH_WRAPPER =
+  'my $file = shift; open(my $h, ">", $file) or die "$file: $!"; print $h $$; close $h; exec { $ARGV[0] } @ARGV or die "exec $ARGV[0]: $!";';
+const MDNS_SOCKET = "/private/var/run/mDNSResponder";
+const LOG_DROP_NOTE =
+  "the log stream missed 7 of about 111 tagged sandbox denials in one session on this Mac (2026-10-19)";
 const SOURCE_INPUTS = [
   "apps/cli",
   "packages",
@@ -432,10 +438,10 @@ function stopProcesses(pids) {
 
 let groupCount = 0;
 
-function groupFile(tag) {
+function groupFile(tag, extension = "pid") {
   mkdirSync(groupsDir, { recursive: true });
   groupCount += 1;
-  return join(groupsDir, `${tag}-${process.pid}-${groupCount}.pid`);
+  return join(groupsDir, `${tag}-${process.pid}-${groupCount}.${extension}`);
 }
 
 function groupMembers(pgid, sinceMs) {
@@ -454,6 +460,17 @@ function reapGroup(path) {
   const pgid = Number(readFileSync(path, "utf8").trim());
   const members = pgid > 1 ? groupMembers(pgid, statSync(path).mtimeMs - 1000) : [];
   const stopped = members.length > 0 ? stopProcesses(members) : [];
+  rmSync(path, { force: true });
+  return stopped;
+}
+
+function reapWatch(path) {
+  const pid = Number(readFileSync(path, "utf8").trim());
+  const command =
+    pid > 1 ? (tryRun("/bin/ps", ["-o", "command=", "-p", String(pid)])?.trim() ?? "") : "";
+  const ours =
+    command.startsWith("/usr/bin/log stream") && command.includes(`CONTAINS "${tagPrefix}-`);
+  const stopped = ours ? stopProcesses([pid]) : [];
   rmSync(path, { force: true });
   return stopped;
 }
@@ -493,39 +510,53 @@ function requireState() {
 }
 
 // log show on this Mac (macOS 26.6.2) returns no kernel sandbox report that log stream shows, so each sandboxed run
-// gets a log stream for its tag, started before the run and stopped after it.
+// gets a log stream for its tag, started before the run and stopped after it. ps -E hides /usr/bin/log's
+// environment, so each stream writes its PID to a .watch record that cleanup reads if this script dies.
 const watches = new Set();
 process.on("exit", () => {
-  for (const watch of watches) {
-    try {
-      process.kill(watch.pid, "SIGTERM");
-    } catch {}
-  }
+  for (const watch of watches) endWatch(watch);
 });
 
+function endWatch(watch) {
+  try {
+    process.kill(watch.pid, "SIGTERM");
+  } catch {}
+  rmSync(watch.record, { force: true });
+  watches.delete(watch);
+}
+
 function startDenialWatch(match, path) {
+  const record = groupFile(match.replace(/-$/, ""), "watch");
   const fd = openSync(path, "a");
   const child = spawn(
-    "/usr/bin/log",
-    ["stream", "--style", "ndjson", "--predicate", `senderImagePath ENDSWITH "Sandbox" AND eventMessage CONTAINS "${match}"`],
-    { stdio: ["ignore", fd, fd], env: { PATH: "/usr/bin:/bin", VERIFY_CONTENTMONSTER_STATE: stateDir } },
+    "/usr/bin/perl",
+    [
+      "-e",
+      WATCH_WRAPPER,
+      record,
+      "/usr/bin/log",
+      "stream",
+      "--style",
+      "ndjson",
+      "--predicate",
+      `senderImagePath ENDSWITH "Sandbox" AND eventMessage CONTAINS "${match}"`,
+    ],
+    { stdio: ["ignore", fd, fd], env: { PATH: "/usr/bin:/bin" } },
   );
   closeSync(fd);
   child.unref();
-  const watch = { path, pid: child.pid };
+  const watch = { path, pid: child.pid, record };
   watches.add(watch);
   const deadline = Date.now() + 10000;
-  while (Date.now() < deadline && !readFileSync(path, "utf8").includes("Filtering the log data")) sleep(100);
+  while (Date.now() < deadline && !readFileSync(path, "utf8").includes("Filtering the log data"))
+    sleep(100);
   sleep(1000);
   return watch;
 }
 
 function stopDenialWatch(watch, tag) {
   sleep(1000);
-  try {
-    process.kill(watch.pid, "SIGTERM");
-  } catch {}
-  watches.delete(watch);
+  endWatch(watch);
   return readDenials(watch.path, tag);
 }
 
@@ -568,9 +599,18 @@ function logControl(tag, tools) {
   const deadline = Date.now() + 5000;
   while (Date.now() < deadline && !/^\d+$/m.test(readFileSync(out, "utf8"))) sleep(50);
   const port = Number(readFileSync(out, "utf8").match(/^(\d+)$/m)?.[1] ?? 0);
-  const probe = sandboxSpawn(tag, tools, tools.node, ["-e", probeScript(
-    `const s=require("net").connect(${port},"127.0.0.1");s.on("connect",()=>report({pid:process.pid,result:"connected"}));s.on("error",(e)=>report({pid:process.pid,result:e.code}));setTimeout(()=>report({pid:process.pid,result:"TIMEOUT"}),5000);`,
-  )], { extraEnv: { NODE_OPTIONS: "" } });
+  const probe = sandboxSpawn(
+    tag,
+    tools,
+    tools.node,
+    [
+      "-e",
+      probeScript(
+        `const s=require("net").connect(${port},"127.0.0.1");s.on("connect",()=>report({pid:process.pid,result:"connected"}));s.on("error",(e)=>report({pid:process.pid,result:e.code}));setTimeout(()=>report({pid:process.pid,result:"TIMEOUT"}),5000);`,
+      ),
+    ],
+    { extraEnv: { NODE_OPTIONS: "" } },
+  );
   sleep(200);
   try {
     process.kill(standIn.pid, "SIGTERM");
@@ -623,6 +663,39 @@ function describeAttempts(rows) {
   ].join("; ");
 }
 
+// A recorded attempt is in the log when the same process has a denied connect to its port or, for a host name,
+// to mDNSResponder. A dns.lookup of an IP literal never reaches the kernel.
+function unloggedAttempts(attempts, denials) {
+  const explains = (attempt, denial) =>
+    denial.pid === attempt.pid &&
+    denial.operation === "network-outbound" &&
+    (denial.target === `remote:*:${attempt.port}` ||
+      (isIP(attempt.host) === 0 && denial.target === MDNS_SOCKET));
+  return attempts.filter(
+    (attempt) =>
+      !(attempt.kind === "dns.lookup" && isIP(attempt.host) !== 0) &&
+      !denials.some((denial) => explains(attempt, denial)),
+  );
+}
+
+function refusalLine(seen, denials, unlogged) {
+  const listed =
+    denials.length > 0
+      ? summarizeDenials(denials).join("; ")
+      : unlogged.length > 0
+        ? "none seen in the log"
+        : `none seen in the log; ${LOG_DROP_NOTE}, so this is not proof that nothing was refused`;
+  return [
+    seen
+      ? ""
+      : "BLIND (the log stream did not show this run's control denial, so refusals may be missing); recorded: ",
+    listed,
+    unlogged.length > 0
+      ? `; ${unlogged.length} recorded attempt(s) with no kernel line: ${describeAttempts(unlogged)} (the log may have dropped their denials, so treat each as unconfirmed)`
+      : "",
+  ].join("");
+}
+
 function sandboxSpawn(tag, tools, command, args, options = {}) {
   const group = groupFile(tag);
   const result = spawnSync(
@@ -673,10 +746,16 @@ function sandboxLogCheck(tools) {
   control.seen = stopDenialWatch(watch, tag).some((denial) => isLogControl(control, denial));
   rmSync(path, { force: true });
   if (control.result !== "EPERM" || control.connections > 0) {
-    return { ok: false, detail: `a connect to 127.0.0.1:${control.port} inside the profile got ${control.result} and reached the stand-in ${control.connections} time(s)` };
+    return {
+      ok: false,
+      detail: `a connect to 127.0.0.1:${control.port} inside the profile got ${control.result} and reached the stand-in ${control.connections} time(s)`,
+    };
   }
   return control.seen
-    ? { ok: true, detail: `a connect to a stand-in on 127.0.0.1:${control.port} got EPERM, and the log stream showed the denial` }
+    ? {
+        ok: true,
+        detail: `a connect to a stand-in on 127.0.0.1:${control.port} got EPERM, and the log stream showed the denial`,
+      }
     : {
         ok: true,
         blind: true,
@@ -726,14 +805,19 @@ function healthChecks(tools, state) {
 
 function printChecks(checks) {
   for (const check of checks)
-    console.log(`${check.blind ? "BLIND" : check.ok ? "OK  " : "FAIL"} ${check.name}: ${check.detail}`);
+    console.log(
+      `${check.blind ? "BLIND" : check.ok ? "OK  " : "FAIL"} ${check.name}: ${check.detail}`,
+    );
   return checks.every((check) => check.ok);
 }
 
 function doctor() {
   const tools = toolchain();
   const state = readState();
-  const ok = printChecks([...healthChecks(tools, state), { name: "sandbox log", ...sandboxLogCheck(tools) }]);
+  const ok = printChecks([
+    ...healthChecks(tools, state),
+    { name: "sandbox log", ...sandboxLogCheck(tools) },
+  ]);
   if (state !== null) {
     const source = sourceFingerprint();
     console.log(
@@ -745,9 +829,20 @@ function doctor() {
       0,
     );
     const hosts = drives.flatMap((dir) => readJsonLines(join(dir, "egress.jsonl")));
-    const blind = drives.filter((dir) => readJson(join(dir, "log-control.json"))?.seen !== true).length;
+    const unlogged = drives.reduce(
+      (sum, dir) =>
+        sum +
+        unloggedAttempts(
+          readJsonLines(join(dir, "egress.jsonl")),
+          readJson(join(dir, "denials.json")) ?? [],
+        ).length,
+      0,
+    );
+    const blind = drives.filter(
+      (dir) => readJson(join(dir, "log-control.json"))?.seen !== true,
+    ).length;
     console.log(
-      `INFO egress: ${drives.length} drive(s) this run, ${denied} sandbox refusal line(s), ${hosts.length} recorded outbound attempt(s)${blind ? `; ${blind} drive(s) BLIND (the log stream missed their control denial)` : ""}. \`egress\` lists them`,
+      `INFO egress: ${drives.length} drive(s) this run, ${denied} sandbox refusal line(s), ${hosts.length} recorded outbound attempt(s), ${unlogged} with no kernel line${blind ? `; ${blind} drive(s) BLIND (the log stream missed their control denial)` : ""}. \`egress\` lists them`,
     );
   }
   process.exit(ok ? 0 : 1);
@@ -844,7 +939,10 @@ function up() {
   writeJson(join(runDir, "install-reaped.json"), install.reaped);
   const installDenials = stopDenialWatch(installWatch, installTag);
   installControl.seen = installDenials.some((denial) => isLogControl(installControl, denial));
-  writeJson(join(runDir, "install-denials.json"), installDenials.filter((denial) => !isLogControl(installControl, denial)));
+  writeJson(
+    join(runDir, "install-denials.json"),
+    installDenials.filter((denial) => !isLogControl(installControl, denial)),
+  );
   writeJson(join(runDir, "install-log-control.json"), installControl);
   console.log(`up: sandbox log control: ${logControlLine(installControl)}`);
   if (install.status !== 0) {
@@ -1004,21 +1102,21 @@ function drive(state, tools, { name, argv, timeout }) {
     ? readFileSync(join(dir, "stderr.txt"), "utf8")
     : "";
   const attempts = readJsonLines(join(dir, "egress.jsonl"));
+  const unlogged = unloggedAttempts(attempts, denials);
+  writeJson(join(dir, "unlogged-attempts.json"), unlogged);
   const wrote =
     writes.statusAdded.length + writes.statusRemoved.length > 0 ||
     sourceBefore.fingerprint !== sourceAfter.fingerprint;
   appendFileSync(
     join(state.runDir, "actions.log"),
-    `${JSON.stringify({ ts: startedAt.toISOString(), name, command: `pnpm --filter cli ${argv.join(" ")}`, exit, denials: denials.length, logControlSeen: control.seen, attempts: attempts.length, wrote })}\n`,
+    `${JSON.stringify({ ts: startedAt.toISOString(), name, command: `pnpm --filter cli ${argv.join(" ")}`, exit, denials: denials.length, logControlSeen: control.seen, attempts: attempts.length, unlogged: unlogged.length, wrote })}\n`,
   );
   console.log(`$ pnpm --filter cli ${argv.join(" ")}`);
   console.log(`--- stdout\n${stdout}--- stderr\n${stderr}---`);
   console.log(
     `exit: ${exit.timedOut ? `TIMEOUT after ${timeout}s` : `${exit.code}${exit.signal ? ` (signal ${exit.signal})` : ""}`}`,
   );
-  console.log(
-    `sandbox refusals: ${control.seen ? "" : "BLIND (the log stream did not show this run's control denial, so refusals may be missing); recorded: "}${denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`,
-  );
+  console.log(`sandbox refusals: ${refusalLine(control.seen, denials, unlogged)}`);
   console.log(
     `recorded outbound attempts: ${attempts.length === 0 ? "none" : describeAttempts(attempts)}`,
   );
@@ -1031,7 +1129,7 @@ function drive(state, tools, { name, argv, timeout }) {
     );
   }
   console.log(`evidence: ${dir}`);
-  return { dir, exit, stdout, stderr, denials, attempts, writes };
+  return { dir, exit, stdout, stderr, denials, attempts, unlogged, writes };
 }
 
 function runner(dir) {
@@ -1082,7 +1180,7 @@ function egress() {
   const installAttempts = readJsonLines(join(state.runDir, "install-egress.jsonl"));
   const installBlind = readJson(join(state.runDir, "install-log-control.json"))?.seen !== true;
   console.log(
-    `install: ${installBlind ? "BLIND, " : ""}${installDenials.length} refusal line(s) ${summarizeDenials(installDenials).join("; ")}; ${installAttempts.length} recorded attempt(s) ${describeAttempts(installAttempts)}`,
+    `install: refusals: ${refusalLine(!installBlind, installDenials, unloggedAttempts(installAttempts, installDenials))}; recorded attempts: ${installAttempts.length === 0 ? "none" : describeAttempts(installAttempts)}`,
   );
   for (const dir of driveDirs(state)) {
     const spec = readJson(join(dir, "spec.json"));
@@ -1090,9 +1188,7 @@ function egress() {
     const attempts = readJsonLines(join(dir, "egress.jsonl"));
     console.log(`${dir.slice(state.runDir.length + 1)}: ${spec.display}`);
     const blind = readJson(join(dir, "log-control.json"))?.seen !== true;
-    console.log(
-      `  refusals: ${blind ? "BLIND (the log stream missed this run's control denial); recorded: " : ""}${denials.length === 0 ? "none" : summarizeDenials(denials).join("; ")}`,
-    );
+    console.log(`  refusals: ${refusalLine(!blind, denials, unloggedAttempts(attempts, denials))}`);
     console.log(
       `  recorded attempts: ${attempts.length === 0 ? "none" : describeAttempts(attempts)}`,
     );
@@ -1231,26 +1327,44 @@ function selftest() {
   ];
   const watch = startDenialWatch(`${tagPrefix}-selftest-`, join(dir, "sandbox-denials.ndjson"));
   const control = requireLogControl(logControl(`${tagPrefix}-selftest-log-control`, tools));
-  const results = [];
-  for (const probe of probes) {
-    const tag = `${tagPrefix}-selftest-${probe.guard}`;
+  const runProbe = (probe, tag) => {
     for (const [key, value] of Object.entries(probe.callerEnv ?? {})) process.env[key] = value;
     const out = sandboxSpawn(tag, tools, tools.node, ["-e", probe.script], {
       extraEnv: { VERIFY_EGRESS_LOG: join(dir, `${probe.guard}.egress.jsonl`) },
     });
     for (const key of Object.keys(probe.callerEnv ?? {})) delete process.env[key];
-    let observed;
     try {
-      observed = JSON.parse(out.stdout);
+      return JSON.parse(out.stdout);
     } catch {
-      observed = { raw: `${out.stdout}${out.stderr}`.trim(), status: out.status };
+      return { raw: `${out.stdout}${out.stderr}`.trim(), status: out.status };
     }
-    results.push({ ...probe, script: undefined, callerEnv: undefined, observed, tag });
+  };
+  const results = probes.map((probe) => {
+    const tag = `${tagPrefix}-selftest-${probe.guard}`;
+    return {
+      ...probe,
+      script: undefined,
+      callerEnv: undefined,
+      observed: runProbe(probe, tag),
+      tag,
+    };
+  });
+  sleep(1000);
+  for (const [index, result] of results.entries()) {
+    const missingLine =
+      result.expect === "refused" &&
+      REFUSAL_CODES.includes(result.observed.error) &&
+      readDenials(watch.path, result.tag).length === 0;
+    if (!missingLine) continue;
+    result.firstTry = result.observed;
+    result.observed = runProbe(probes[index], `${result.tag}-retry`);
   }
   tmux(["kill-server"]);
   rmSync(probeDir, { recursive: true, force: true });
   stopDenialWatch(watch, "");
-  control.seen = readDenials(watch.path, control.tag).some((denial) => isLogControl(control, denial));
+  control.seen = readDenials(watch.path, control.tag).some((denial) =>
+    isLogControl(control, denial),
+  );
   for (const result of results) {
     result.denials = readDenials(watch.path, result.tag);
     result.recorded = describeAttempts(readJsonLines(join(dir, `${result.guard}.egress.jsonl`)));
@@ -1261,14 +1375,17 @@ function selftest() {
           ? Array.isArray(result.observed.present) && result.observed.present.length === 0
           : result.observed.read === true || result.observed.connected === true;
     result.blind =
-      !result.held && !control.seen && result.expect === "refused" && REFUSAL_CODES.includes(result.observed.error);
+      !result.held &&
+      !control.seen &&
+      result.expect === "refused" &&
+      REFUSAL_CODES.includes(result.observed.error);
   }
   writeJson(join(dir, "selftest.json"), { logControl: control, results });
   console.log(`log control: ${logControlLine(control)}`);
   for (const result of results) {
     const denial = summarizeDenials(result.denials).join("; ") || "no kernel line";
     console.log(
-      `${result.held ? "HELD" : result.blind ? "BLIND" : "FAIL"} ${result.guard} (expect ${result.expect}): observed ${JSON.stringify(result.observed)}; ${denial}${result.recorded ? `; recorder saw ${result.recorded}` : ""}`,
+      `${result.held ? "HELD" : result.blind ? "BLIND" : "FAIL"} ${result.guard} (expect ${result.expect}): observed ${JSON.stringify(result.observed)}; ${denial}${result.recorded ? `; recorder saw ${result.recorded}` : ""}${result.firstTry ? "; retried once, the first try got the refusal but no kernel line" : ""}`,
     );
   }
   console.log(`evidence: ${join(dir, "selftest.json")}`);
@@ -1284,8 +1401,13 @@ function cleanup({ exit = true } = {}) {
     if (child && alive(child.pid, child.start)) pids.add(child.pid);
   }
   const stopped = pids.size > 0 ? stopProcesses([...pids]) : [];
-  const groups = existsSync(groupsDir) ? readdirSync(groupsDir) : [];
-  for (const name of groups) stopped.push(...reapGroup(join(groupsDir, name)));
+  const records = existsSync(groupsDir) ? readdirSync(groupsDir) : [];
+  for (const name of records) {
+    const path = join(groupsDir, name);
+    if (name.endsWith(".pid")) stopped.push(...reapGroup(path));
+    else if (name.endsWith(".watch")) stopped.push(...reapWatch(path));
+    else rmSync(path, { force: true });
+  }
   tmux(["kill-server"]);
   rmSync(stateDir, { recursive: true, force: true });
   if (existsSync(groupsDir) && readdirSync(groupsDir).length === 0)
@@ -1298,7 +1420,7 @@ function cleanup({ exit = true } = {}) {
   );
   if (leftover.length > 0 || serverUp || recorded.length > 0) {
     console.error(
-      `cleanup: still running: ${[...leftover.map(String), serverUp ? `tmux server ${tmuxSocket}` : null, ...recorded.map((name) => `group ${name}`)].filter(Boolean).join(", ")}`,
+      `cleanup: still running: ${[...leftover.map(String), serverUp ? `tmux server ${tmuxSocket}` : null, ...recorded.map((name) => `record ${name}`)].filter(Boolean).join(", ")}`,
     );
     if (exit) process.exit(1);
   }
