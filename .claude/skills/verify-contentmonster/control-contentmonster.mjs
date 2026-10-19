@@ -516,6 +516,7 @@ function startDenialWatch(match, path) {
   watches.add(watch);
   const deadline = Date.now() + 10000;
   while (Date.now() < deadline && !readFileSync(path, "utf8").includes("Filtering the log data")) sleep(100);
+  sleep(1000);
   return watch;
 }
 
