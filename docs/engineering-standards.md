@@ -26,11 +26,11 @@
 ## Source control & flow
 - ✅ Branch-first for code/config (this migration on `migrate/monorepo-turborepo-pnpm`).
 - ✅ Bisectable commits, one per phase, Co-Authored-By trailer.
-- ✅ Commit routing (mirrors gtmmachines): state + artifact docs → main; code/config → branch + PR.
+- ✅ Commit routing: every change lands through a PR; main is PR-only.
 
 ## Review & quality gates
 - ✅ Per-phase verify gates during the migration (install/check-types/build/cli smoke).
-- ⏳ **Review twice before ship:** `/gstack-review` + `/gstack-codex`, then `/gstack-ship` (Brad-gated; not yet run on this branch).
+- ⏳ **Review before ship:** pstack's Shipping playbook (independent verifier, then merge); not yet run on this branch.
 
 ## Runtime concerns
 - ✅ Secrets gitignored (`.env*` keep `!.env.example`, `secrets/`, `bzdocs/`, `credentials/`).

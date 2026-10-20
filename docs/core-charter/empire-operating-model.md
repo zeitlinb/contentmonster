@@ -124,7 +124,7 @@ capability yet).
    narrow, audited direct handshake for *routine asset orders* could be authorized later — §8).
 3. **No rebuilt Brief Router** — the June-10 "seam dissolution" deliberately collapsed the old
    two-repo brief pipeline; don't re-introduce it.
-4. **Lane separation** — build-state → gstack; what-we-build → charter/doctrine; substrate stays
+4. **Lane separation** — build-state → pstack; what-we-build → charter/doctrine; substrate stays
    orthogonal to capabilities.
 5. **Durability** — durable routing/ownership rules live in git-tracked workspace/charter files, not
    in auto-memory.
