@@ -33,7 +33,6 @@ First/test tenant: Jaca Sugar. May later plug into GTM Machines as a CREATE surf
 - **`docs/core-charter/brainstorm/`** — dated working docs where decisions get argued before promotion to the charter.
 - **`docs/engineering-standards.md`** — readiness board for build, tooling and CI, with live status.
 - **`docs/reference/`** — engine specs preserved verbatim: `pipeline-spec`, `platform-rules`, `tech-decisions`, `lessons-learned` (read lessons-learned before any generation).
-- **`docs/state/`** — session checkpoints; the newest filename is the current resume point.
 
 ## Content rules
 
