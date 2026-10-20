@@ -38,8 +38,8 @@
 - ⏳ Provider SDK wiring (Gemini, Grok, googleapis) — modules are stubs.
 
 ## Context & continuity
-- ✅ Docs doctrine: `core-charter/` + `brainstorm/`, `reference/`, `state/`, `tools/`, `runbooks/`.
-- ✅ `docs/state/` checkpoints; gstack trial/global (state in `~/.gstack`, backed up to `docs/state/`).
+- ✅ Docs doctrine: `core-charter/` + `brainstorm/`, `reference/`, `tools/`, `runbooks/`.
+- ✅ Context and state: pstack (open-pstack poteto-mode).
 - ✅ Project memory at `~/.claude/projects/-Users-zeitlinb-Projects-contentmonster/memory/`.
 
 ## Deploy

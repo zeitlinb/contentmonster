@@ -82,7 +82,7 @@ flowchart TB
 | Run an SEO / AI-visibility audit + deliver to a paying client | **Constellation** (CAPTURE) — dev team; doctrine flows from bzresearch via Brad-mediated briefs |
 | Register a new company as a content tenant / set its brand rules | **ContentMonster** — add `clients/<id>/`; destination rules in `platform/` |
 | Stand up a new company / marketing site / repo properly | **Substrate** — `bz-setup` + gstack, reusing the unfairmachines foundation |
-| Track build-process state (plan/review/test/ship/handoff) | **gstack** (`/gstack-*`) in that repo |
+| Track build-process state (plan/review/test/ship/handoff) | **pstack** (open-pstack poteto-mode) in that repo |
 | Capture a cross-company learning so it compounds | **bzresearch** audit-findings → doctrine (destined for bzbrain) |
 | Recency / demand research on a topic | Brad invokes `/last30days`; deeper research → bzresearch |
 | Can't place a task? | Map it to a verb: KNOW=bzresearch · CREATE=ContentMonster · DISTRIBUTE=GTM Machines · CAPTURE=Constellation · CONVERT=company CRM · build-it=substrate. If it's about a specific company's brand/offer/go-no-go, the **company** owns the decision and consumes the engine. |

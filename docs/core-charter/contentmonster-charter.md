@@ -60,8 +60,8 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 
 ## 5. Context Snapshot
 
-Monorepo migration shipped to branch `migrate/monorepo-turborepo-pnpm` on 2026-06-21
-(see latest `docs/state/`). No app logic implemented yet — `packages/core` modules are
+Monorepo migration shipped to branch `migrate/monorepo-turborepo-pnpm` on 2026-06-21.
+No app logic implemented yet — `packages/core` modules are
 typed stubs. The book pipeline (D1) is **killed** (2026-06-27); the remaining deferred build is
 the ad pipeline's Drive-sync + `generate-scene` CLIs (see [`../runbooks/google-drive-setup.md`](../runbooks/google-drive-setup.md)).
 
