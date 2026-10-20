@@ -53,15 +53,15 @@ First/test tenant: **Jaca Sugar** (allulose sweetener). Tenant config in
 ## 4. Operating Principles
 
 - **pstack is HOW we build, not WHAT we build.**
-- **Lanes:** build-process → gstack; what-we-build (pipelines, brand/tenant knowledge, decisions) → this charter + `docs/`; engine logic → `packages/core` + `apps/cli`.
+- **Lanes:** build-process → pstack; what-we-build (pipelines, brand/tenant knowledge, decisions) → this charter + `docs/`; engine logic → `packages/core` + `apps/cli`.
 - **Read the spec before every generation** — from the file, not memory (see [`../reference/lessons-learned.md`](../reference/lessons-learned.md); dimension-check output FIRST).
 - **Vision QA runs after every step, before any human sees output.**
 - **Brad decides direction/taste/go-no-go; the agent drives mechanics.**
 
 ## 5. Context Snapshot
 
-Monorepo migration shipped to branch `migrate/monorepo-turborepo-pnpm` on 2026-06-21
-(see latest `docs/state/`). No app logic implemented yet — `packages/core` modules are
+Monorepo migration shipped to branch `migrate/monorepo-turborepo-pnpm` on 2026-06-21.
+No app logic implemented yet — `packages/core` modules are
 typed stubs. The book pipeline (D1) is **killed** (2026-06-27); the remaining deferred build is
 the ad pipeline's Drive-sync + `generate-scene` CLIs (see [`../runbooks/google-drive-setup.md`](../runbooks/google-drive-setup.md)).
 
