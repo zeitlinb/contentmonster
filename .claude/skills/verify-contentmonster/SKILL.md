@@ -1,6 +1,6 @@
 ---
 name: verify-contentmonster
-description: "Drive the ContentMonster CLI (apps/cli, the `contentmonster` command: steps, download-assets, generate-scene, help and version) from this checkout, the way an operator runs it with `pnpm --filter cli cli`, in a tmux PTY inside a sandbox that refuses every network connect. Use to prove a change to apps/cli or packages/core on the real command: stdout, stderr, exit code, transcript, sandbox refusals and file writes per run."
+description: "Verify ContentMonster's CLI, static web placeholder, and committed HyperFrames smoke-test MP4. Use the sandboxed CLI driver for apps/cli and packages/core, the browser recipe for apps/web, and the artifact recipe for the existing video."
 ---
 
 # Verify ContentMonster
@@ -18,14 +18,17 @@ node .claude/skills/verify-contentmonster/control-contentmonster.mjs --help
 
 ## Surfaces
 
-The repository has two user surfaces. This skill drives the primary one.
+Choose the route for the implemented output you need to verify. Use the CLI sections for commands, [Web route](#web-route) for the static page, and [Video route](#video-route) for the committed MP4. Feature files describe user paths and assertions.
 
 - **The CLI (`apps/cli`) is primary.** The charter puts engine logic in `packages/core` and `apps/cli`, and the runbooks name the CLI commands (`download-assets`, `generate-scene`) as the pipeline's entry points. The CLI is a short-lived process with no server. It runs through `tsx`, which compiles `apps/cli/src` and `packages/core/src` on every run, so there is no build step.
-- **The web app (`apps/web`) is not driven.** It is one static Next.js page that lists the three Meta output formats, and the engineering-standards board calls it a placeholder. Its root layout loads two fonts through `next/font/google`, so `next dev` and `next build` fetch from Google Fonts, a hosted host. Driving it needs a browser harness with request-level egress control and a sandboxed build. Add that to this skill when the page gains behavior.
+- **The web app (`apps/web`) is a static placeholder.** Use [Web route](#web-route) to build the real page in an owned temporary checkout, then drive [Web placeholder](features/web-placeholder.md). It covers the three format rows, responsive light and dark layouts, metadata, favicon, and missing routes. Public Google Fonts are a build prerequisite. This route has a cleared environment and browser request filtering, without the CLI's OS sandbox guarantee.
+- **The committed video (`hyperframes-lab/output.mp4`) is an existing artifact.** Use [Video route](#video-route), then [Existing video](features/existing-video.md), for source dimensions, full decoding, and representative frames. It needs FFmpeg, not generation, credentials, or a HyperFrames upgrade.
 
-## Isolation and threat model
+## CLI isolation and threat model
 
 Threat model. The sandbox stops accidental leaks from three sources: the app's own code paths, this skill's driving of the browser and server, and the browser's normal network paths (fetch, XHR, WebSocket, WebRTC, service workers). Any of those reaching real data, production hosts or the developer's profile is a FAIL. Page code written to break out on purpose (IPC tricks, popup or timing races, exploits) is out of scope: these are our own apps. A verifier notes such a finding but does not fail on it.
+
+This guarantee applies to the CLI driver. The web route declares its public font build prerequisite and weaker browser boundary below. The video route reads local source and media and starts no server.
 
 For this CLI, the sandbox keeps the CLI's own code paths, its dependencies' install scripts and this skill's own driving off every hosted host, and the skill keeps every real key out of the process. Every child the skill starts (`pnpm --version`, `pnpm store path`, `pnpm install`, `pnpm` running a script, `tsx`, the CLI and anything they spawn) runs inside a `sandbox-exec` profile built from `(allow default)` that denies every IP connect and IP bind, loopback included; denies every unix-socket connect except under the state directory's `tmp/`, which `tsx` uses for its IPC socket; denies exec of `open`, `osascript`, `launchctl`, `tmux`, `screen`, `ssh` and `brew`, so a sandboxed process cannot ask the tmux server, Homebrew or another launcher to act for it; denies reading any `.env*` file and anything under a `credentials/` directory; and, when this checkout is a worktree, denies reading file contents in the main checkout outside this worktree. The child environment is rebuilt from nothing (`HOME` and `TMPDIR` under the state directory, `PATH`, `LANG`, `TERM`), so no key exported in the calling shell reaches the CLI.
 
@@ -42,7 +45,7 @@ The script derives everything else from the SHA-256 of `git rev-parse --show-top
 
 One run goes at a time per checkout: `run` and `selftest` refuse while this checkout's tmux server is up. Two worktrees never share state, a tmux server or `node_modules`. The CLI opens no port, so no port check applies.
 
-## Launch
+## CLI launch
 
 ```bash
 export PATH=/opt/homebrew/opt/node@24/bin:$PATH
@@ -63,7 +66,7 @@ The last line is `up: contentmonster 0.1.0.0 ready in the sandbox, evidence <run
 
 `pnpm install --offline` with an empty metadata cache still asks the registry for every package's metadata and retries for minutes. Inside the sandbox those lookups are refused, so the install hangs instead of failing. That is why `up` passes the real metadata cache explicitly.
 
-## Doctor
+## CLI doctor
 
 ```bash
 node .claude/skills/verify-contentmonster/control-contentmonster.mjs doctor
@@ -97,7 +100,7 @@ node .claude/skills/verify-contentmonster/control-contentmonster.mjs selftest
 
 `info` prints the checkout, the hash, the main checkout whose reads are denied, the state and evidence directories, the tmux socket, the toolchain, the install and source inputs and both fingerprints.
 
-## Drive
+## CLI drive
 
 Read the matching file under [`features/`](features/README.md) before you drive. It lists every entry point and the end state that proves each one.
 
@@ -116,7 +119,7 @@ node .claude/skills/verify-contentmonster/control-contentmonster.mjs egress
 - `run` prints the command, stdout, stderr, the exit code, the sandbox refusals, the recorded outbound attempts and the writes, then exits with the CLI's exit code. The refusal line starts with `BLIND` when the stream missed the run's control denial. It ends with `<n> recorded attempt(s) with no kernel line: ...` when the recorder saw an attempt that the stream did not show. With no refusal and no such attempt it reads `none seen in the log; ...`, which is not proof that nothing was refused. A run that passes `--timeout` (default 60 seconds) is stopped and exits 124.
 - `egress` lists the refusals and recorded hosts of the install and of every run in the current run directory.
 
-## Proof bar
+## CLI proof bar
 
 Do not submit "look, it ran" captures. A proof exercises the user path and shows the end state that a skeptical reviewer would accept.
 
@@ -126,7 +129,7 @@ Do not submit "look, it ran" captures. A proof exercises the user path and shows
 - Capture the action and the end state: `spec.json` (the command and the source fingerprint), `stdout.txt`, `stderr.txt`, `exit.json` and `transcript.txt`.
 - Check a second view, not only stdout. `writes.json` shows whether the run changed the checkout, and `egress.jsonl` (what the recorder saw) with `denials.json` (what the log showed) and `unlogged-attempts.json` (recorded attempts the log did not show) show whether it tried to leave the Mac. A command whose real behavior needs a hosted API is unreachable here: report the refusal as the result, never as a pass.
 
-## Driving conventions
+## CLI driving conventions
 
 - Put the CLI's arguments after `--`. Keep quoted values unchanged.
 - Name evidence `<feature>/<entry>` with `--out`, for example `pipeline-steps/cli`. An existing name is refused.
@@ -134,7 +137,7 @@ Do not submit "look, it ran" captures. A proof exercises the user path and shows
 - Stdout is a pipe, so commander wraps help at 80 columns. A wider terminal wraps it differently.
 - Wait on the run's end, which `run` does. Never sleep.
 
-## Evidence
+## CLI evidence
 
 Each `up` starts a run directory at `~/.cache/verify-contentmonster/evidence/<hash>/<run-id>/`. It is outside the checkout, so it is never committed, and `cleanup` never touches it. The run directory holds:
 
@@ -145,7 +148,7 @@ Each `up` starts a run directory at `~/.cache/verify-contentmonster/evidence/<ha
 
 No file holds a credential. The child environment that `spec.json` records holds only paths and locale values.
 
-## Cleanup
+## CLI cleanup
 
 ```bash
 node .claude/skills/verify-contentmonster/control-contentmonster.mjs cleanup
@@ -153,20 +156,69 @@ node .claude/skills/verify-contentmonster/control-contentmonster.mjs cleanup
 
 Cleanup finds this checkout's processes without needing the state file: the pane processes on this checkout's tmux socket, every member of a process group recorded in a `.pid` file under `~/.cache/verify-contentmonster/groups/<hash>/` that started after its record, the PID in each `.watch` file there while that PID still runs `/usr/bin/log stream` for this checkout's tag, any process whose environment carries `VERIFY_CONTENTMONSTER_STATE=<state dir>`, and any runner whose arguments name this checkout's evidence root. macOS shows the environment only for some processes (`node` and `pnpm`, not system binaries such as `/bin/sh`, `/usr/bin/curl` or `/usr/bin/log`), which is why the records exist. With the control script killed by SIGKILL during `selftest`, and again during doctor's log check, `cleanup` stopped the orphaned stream (and the stand-in, in the doctor case) and left no `log stream` for this checkout. It adds the runner and child that the state file recorded when their start times still match. It sends SIGTERM to them and their descendants, then SIGKILL after 5 seconds. It stops the tmux server on this checkout's socket and deletes the state directory. It never matches processes by name, it keeps the evidence and it leaves `node_modules`, which is ignored install output. It exits 1 if a marked process, a group record or the tmux server remains. Run it after every run, failed runs included. A second cleanup does nothing.
 
-## Helpers
+## CLI helpers
 
 - `control-contentmonster.mjs` is the whole driver. It is executable, so `.claude/skills/verify-contentmonster/control-contentmonster.mjs <command>` works the same as the `node` form when Node 24 is first on `PATH`. It needs only Node 24, the pinned `pnpm` and `tmux`, and adds no dependency.
 - `egress-record.mjs` is the outbound-attempt recorder that each sandboxed Node process loads. Do not run it by hand.
-- `features/` is the behavior map. Keep it true in the same PR as any change to `apps/cli`.
+- `features/` is the behavior map. Its same-PR maintenance rules are in [Feature map](#feature-map).
 - `.gitignore` does not ignore `.claude/`, so plain `git add` picks up these files. `pnpm format:check` checks the `.mjs` files here (`.prettierignore` skips `*.md`), so run `pnpm exec prettier --write .claude/skills/verify-contentmonster` after an edit. `pnpm format:check` already fails on main for four other files (HEN-1601).
 
-## What the stand-in differs on
+## CLI production differences
 
 The CLI runs on the operator's Mac in production too, so the drive is the real command. These differences stay unverified here:
 
 - The real Google Drive sync and Gemini scene generation need hosted services and keys. Today both commands print `not implemented yet`. Once they call out, the sandbox refuses the call and the run records it.
 - The CLI runs with a rebuilt environment and an empty `HOME`, so it sees no `.env`, no shell-exported key and no user configuration.
 
+## Web route
+
+**Launch.** Use Node 24, pnpm 11.5.1, Python 3, an already installed browser automation module, and compatible Chromium. Resolve both module and executable before launch. These filesystem inputs work on this Mac for Claude Code and Codex:
+
+```bash
+export PATH=/opt/homebrew/opt/node@24/bin:$PATH
+node -e 'if (process.versions.node.split(".")[0] !== "24") process.exit(1)'
+test "$(pnpm --version)" = 11.5.1
+browser_module=$(node -p 'require.resolve("playwright", { paths: [process.env.HOME + "/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules"] })')
+browser_binary="$HOME/Library/Caches/ms-playwright/chromium-1248/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"
+test -x "$browser_binary"
+```
+
+Codex's `load_workspace_dependencies` is an optional module locator. If the module or browser is absent, report the missing prerequisite. Do not add a product dependency or silently download a replacement.
+
+Start from the repository root. Record `git rev-parse HEAD` and verify an archive of that SHA. Commit the candidate first, or report that uncommitted source was not exercised. Record SHA-256 hashes of `apps/web/src/app/page.tsx`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/globals.css`, `apps/web/src/app/favicon.ico`, and `packages/core/src/platform.ts`. Create a retained evidence directory outside scratch. Measure actual available filesystem bytes with `os.statvfs` before and after the run. Shared APFS allocation and concurrent activity limit attribution.
+
+Use Python's `tempfile.TemporaryDirectory(prefix="verify-contentmonster-web-")` as a context manager for launch, driving, and teardown. Extract `git archive HEAD` into that directory. Keep dependencies, `.next`, browser profile, and newly selected runtime caches there. Before install or launch, create owned `home`, `tmp`, `cache`, and `npm` directories. Rebuild the child environment with only `PATH`, `LANG`, `CI=1`, `NEXT_TELEMETRY_DISABLED=1`, owned `HOME`, `TMPDIR`, `XDG_CACHE_HOME`, and `npm_config_cache`. Do not inherit shell keys. The browser may read its preinstalled executable outside scratch.
+
+The local pnpm store and metadata cache must already contain the locked packages. Resolve `store` with `pnpm store path` before clearing the environment. Set `package_cache` to the existing metadata cache, `~/Library/Caches/pnpm` on this Mac. Their reuse is shared setup input, not a claim that these paths are private or immutable. Missing packages remain an unmet prerequisite. This route skips install hooks.
+
+The build needs public `fonts.googleapis.com` and `fonts.gstatic.com` for `next/font/google`. It has no OS network sandbox. A cleared environment and page-request filtering do not provide the CLI's containment guarantee. Do not claim offline proof. In the temporary checkout, run these commands with the cleared environment. Save their arguments, stdout, stderr, and exit codes outside scratch.
+
+```bash
+pnpm install --frozen-lockfile --offline --ignore-scripts --store-dir "$store" --cache-dir "$package_cache"
+pnpm --filter web build
+pnpm --filter web start --hostname 127.0.0.1 --port "$port"
+```
+
+Choose an unused loopback port with `socket.bind(("127.0.0.1", 0))` and `getsockname()[1]`. Close the reservation just before starting. Start the server with `subprocess.Popen(..., start_new_session=True)`. Record its exact PID, process-group ID, port, command, and log path before driving. Keep the run in one tool call or the host's background-process manager.
+
+**Doctor.** Require install and build exit 0, the recorded server process alive, and `GET http://127.0.0.1:$port/` returning 200 with ContentMonster in the body. Retry readiness for at most 30 seconds while that process remains alive. Save status, body, PID, and port. A port collision or early exit fails doctor. After a failed drive, clean up and start a fresh owned launch and doctor. Retain passing assertions from unchanged source and repeat the failed assertion.
+
+**Drive.** Use a fresh browser context and owned profile, with service workers blocked and background networking, component updates, and sync disabled. Install request interception before navigation, permit only the owned localhost origin, and record every page request and decision. Disable HTTP caching. Playwright's `context.route('**/*', ...)` disables it. Fail on an unexpected origin. Page interception does not certify Chromium background network paths. Run [Web placeholder](features/web-placeholder.md) against this owned instance.
+
+**Evidence and cleanup.** Retain source identity, command arguments, install/build/server logs and exits, doctor result, browser version, request log, actual assertions, and four screenshots. Use `try/finally` around browser and server ownership inside the temporary-directory context. Close context and browser in `finally`. Send SIGTERM to only the recorded server process group, wait for exit, and use SIGKILL for that group if needed. Complete process teardown before the context removes scratch, including on failures. Record direct PID liveness and a refused connection on the owned port. Confirm scratch is absent and evidence survives. Cleanup failure remains a failed run.
+
+## Video route
+
+**Launch and doctor.** Use installed FFmpeg and ffprobe. Record their actual versions. Start no server or generator. Create a fresh retained evidence directory with `mktemp -d` outside any automatically cleaned scratch. Set `proof` to its absolute path and `video` to the absolute `hyperframes-lab/output.mp4` path. Record the candidate SHA and SHA-256 hashes of `hyperframes-lab/index.html` and the MP4. Require those working files to match the recorded SHA, or explicitly identify their changed bytes as the target. Both files must exist and be nonempty. Doctor fails if ffprobe cannot read the media.
+
+Read the HTML's dimensions, duration, three timed clips, paused registered GSAP timeline, title entrance, rule and subtitle entrance, and stage fade beginning at 5.3 seconds. Drive [Existing video](features/existing-video.md). No credentials or network access are needed.
+
+**Evidence and cleanup.** Retain versions, source identity and observations, ffprobe output, the executed fail-fast command block and its tool exit, complete-decode logs, all five PNGs, and visual findings. A nonzero block exit is incomplete proof. These commands write only requested evidence and start no persistent process. Put any extra decode scratch in an automatically cleaned temporary directory. Confirm evidence still exists after cleanup.
+
+Composition checks and renders use the installed `/hyperframes` skill. `hyperframes-lab/package.json` pins `hyperframes@0.6.121` and calls `lint`, `validate`, and `inspect`. This artifact route does not certify those scripts or a new render. Public GSAP and compiler font setup belong to that separate composition route.
+
 ## Feature map
 
-The behavior inventory lives in [`features/`](features/README.md). Each file uses the same four H2s: `Sub-features`, `How to get to it (user POV)`, `Driving it with control-contentmonster`, `Gotchas`.
+The behavior inventory lives in [`features/`](features/README.md). Each file has `Sub-features`, `How to get to it (user POV)`, a `Driving it with` section naming its tools, and `Gotchas`.
+
+Keep the CLI recipes true in the same PR as changes to `apps/cli` or `packages/core`. Keep the web recipe true in the same PR as changes to `apps/web` or `packages/core/src/platform.ts`. Keep the video recipe true in the same PR as changes to `hyperframes-lab/index.html` or `hyperframes-lab/output.mp4`.

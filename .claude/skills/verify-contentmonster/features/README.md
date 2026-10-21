@@ -1,8 +1,8 @@
 # ContentMonster verification map
 
-This directory is the maintained source for verifying the user-facing behavior of the ContentMonster CLI (`apps/cli`, the `contentmonster` command). Read the index before you drive the CLI, then use the matching feature file as the recipe. The web app (`apps/web`) is not mapped yet; [SKILL.md](../SKILL.md) says why.
+This directory maps the ContentMonster CLI, static web placeholder, and committed smoke-test video. Read the matching feature recipe before you drive it. [SKILL.md](../SKILL.md) describes the routes and their different isolation guarantees.
 
-## Baseline preconditions
+## CLI baseline preconditions
 
 - Node 24 is first on `PATH`: `export PATH=/opt/homebrew/opt/node@24/bin:$PATH`.
 - The checkout holds no `.env*` file and no `credentials/` directory, so the CLI runs without a key.
@@ -10,7 +10,7 @@ This directory is the maintained source for verifying the user-facing behavior o
 - `node .claude/skills/verify-contentmonster/control-contentmonster.mjs doctor` exits 0.
 - Never drive a CLI run that this checkout did not start. `run` refuses while this checkout's tmux server is up.
 
-## Driving conventions
+## CLI driving conventions
 
 - Start every recipe from the baseline state unless its preconditions say otherwise.
 - Run every CLI action through `control-contentmonster run -- <args>`, which runs `pnpm --filter cli cli <args>`. Run a package script through `control-contentmonster run --script <name> -- <args>`, which runs `pnpm --filter cli <name> <args>`.
@@ -19,7 +19,7 @@ This directory is the maintained source for verifying the user-facing behavior o
 - Name evidence `<feature>/<entry>` with `--out`, for example `generate-scene/script`.
 - The CLI stores nothing today. A run that writes shows it in `writes.json`.
 
-## Proof and skip reporting
+## CLI proof and skip reporting
 
 - Capture the user action and the resulting state, not only the final line.
 - CLI proof includes the command and source fingerprint (`spec.json`), `stdout.txt`, `stderr.txt`, the exit code (`exit.json`) and the pane transcript (`transcript.txt`).
@@ -32,12 +32,14 @@ This directory is the maintained source for verifying the user-facing behavior o
 
 ## Full sweep
 
-Walk the features in this order for a broad regression of `apps/cli`:
+Walk the first four features for a broad regression of `apps/cli`. For complete implemented-output coverage, also run the two independent web and video recipes.
 
 1. [Help and version](./help-and-version.md)
 2. [Pipeline steps](./pipeline-steps.md)
 3. [Download assets](./download-assets.md)
 4. [Generate scene](./generate-scene.md)
+5. [Web placeholder](./web-placeholder.md)
+6. [Existing video](./existing-video.md)
 
 ## Feature entry contract
 
@@ -45,10 +47,10 @@ Each feature file starts with an H1 title and one paragraph that describes the u
 
 1. `Sub-features` lists short IDs with one line for each behavior.
 2. `How to get to it (user POV)` lists every user entry point.
-3. `Driving it with control-contentmonster` starts with `Preconditions:` and uses labeled bullets that pair each user action with an exact command and an observable result.
+3. `Driving it with <tools>` starts with `Preconditions:` and pairs user actions with commands and observable results. The CLI uses `control-contentmonster`.
 4. `Gotchas` lists traps that can waste or invalidate a verification run.
 
-Keep implementation details out of the map. Name only user paths, stable handles, required state, commands and observable proof. Add a feature file when the CLI gains a command, and delete one when a command goes away.
+Keep implementation details out of the map. Name only user paths, stable handles, required state, commands, and observable proof. Put operational launch, doctor, evidence, and cleanup instructions in SKILL.md. Add or remove a feature file when an implemented output changes.
 
 ## Features
 
@@ -56,3 +58,5 @@ Keep implementation details out of the map. Name only user paths, stable handles
 - [Pipeline steps](./pipeline-steps.md) covers `steps`, the numbered list of the eight ad-creative pipeline steps.
 - [Download assets](./download-assets.md) covers `download-assets` from the CLI and from its package script, and the Google Drive sync it stands for.
 - [Generate scene](./generate-scene.md) covers `generate-scene` from the CLI and from its package script, and the Gemini scene generation it stands for.
+- [Web placeholder](./web-placeholder.md) covers `/`, format rows, desktop and mobile layout, light and dark colors, title, language, favicon, and a missing route.
+- [Existing video](./existing-video.md) covers the committed MP4's dimensions, duration, full decode, entrance, hold, and closing fade.
