@@ -26,4 +26,4 @@ Preconditions:
 ## Gotchas
 
 - `steps` takes no arguments. `steps extra` exits 1 with `error: too many arguments for 'steps'. Expected 0 arguments but got 1.` in stderr.
-- The step names are the pipeline spec's IDs, not display names. A rename in `packages/core` changes this output, so drive this feature for any change there.
+- The step names are the step IDs that `packages/core` defines, not the display headings in `docs/reference/pipeline-spec.md` (`Step 1 — Scene Generation`). A rename in `packages/core` changes this output, so drive this feature for any change there.
